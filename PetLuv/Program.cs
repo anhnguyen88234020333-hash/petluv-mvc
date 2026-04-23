@@ -1,7 +1,13 @@
+﻿using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Đăng ký kết nối Database
+builder.Services.AddDbContext<PetLuv.Data.PetLuvDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
