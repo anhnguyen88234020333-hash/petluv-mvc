@@ -1,0 +1,86 @@
+@model IEnumerable<PetLuv.Models.Product>
+
+@{
+    ViewData["Title"] = "Danh sách thú cưng";
+}
+
+<style>
+    /* CSS Cố định tỉ lệ bảng */
+    .fixed-table {
+        table-layout: fixed; /* Ép bảng tuân thủ width % */
+        width: 100%;
+    }
+
+    /* Làm cho ảnh đẹp hơn */
+    .product-img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        transition: 0.3s;
+    }
+    
+    .product-img:hover {
+        transform: scale(1.1);
+    }
+
+    .table thead {
+        background-color: #ffc107;
+        color: white;
+    }
+
+    .price-text {
+        color: #d9534f;
+        font-weight: bold;
+    }
+
+    /* Ép cột mô tả phải hiện hết chữ và xuống dòng */
+    .description-cell {
+        white-space: normal !important; /* Tuyệt đối không cho cắt chữ */
+        word-wrap: break-word; /* Tự xuống dòng */
+        overflow: visible !important; /* Hiện hết nội dung tràn */
+        text-align: justify;
+        vertical-align: middle !important;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+</style>
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4 text-primary">DANH SÁCH SẢN PHẨM PETLUV</h2>
+
+    <div class="table-responsive">
+        <table class="table table-hover shadow-sm fixed-table">
+            <thead>
+                <tr>
+                    <th style="width: 20%;">Tên sản phẩm</th>
+                    <th style="width: 15%;">Giá bán</th>
+                    <th style="width: 15%;" class="text-center">Hình ảnh</th>
+                    <th style="width: 50%;">Mô tả</th> </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="align-middle" style="word-wrap: break-word;">@item.ProductName</td>
+                        <td class="align-middle price-text">@item.Price.ToString("N0") VNĐ</td>
+                        <td class="text-center align-middle">
+                            @if (!string.IsNullOrEmpty(item.ImageURL))
+                            {
+                                <img src="/images/@item.ImageURL" class="product-img" alt="@item.ProductName" />
+                            }
+                            else
+                            {
+                                <span class="text-muted">Không có ảnh</span>
+                            }
+                        </td>
+                        <td class="description-cell text-muted">
+                            @item.Description
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
