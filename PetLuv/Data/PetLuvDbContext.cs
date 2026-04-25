@@ -1,12 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PetLuv.Models; 
 
 namespace PetLuv.Data
 {
     public class PetLuvDbContext : DbContext
     {
-        public PetLuvDbContext(DbContextOptions<PetLuvDbContext> options) : base(options) { }
+        public PetLuvDbContext(DbContextOptions<PetLuvDbContext> options) : base(options)
+        {
+        }
 
-        // để trống xong Model thêm vào sau
+        
+        public DbSet<User> Users { get; set; }
     }
-
 }
