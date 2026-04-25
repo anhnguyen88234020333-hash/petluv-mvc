@@ -17,6 +17,20 @@
                 <a asp-controller="Home" asp-action="Index">Trang chủ</a>
                 <a asp-controller="Home" asp-action="Privacy">Sản phẩm</a>
                 <a asp-controller="Home" asp-action="Index">Giỏ hàng</a>
+
+            @* Đoạn logic kiểm tra đăng nhập Kim Anh *@
+            @if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                <span style="color: #512773; font-weight: bold; margin-left: 15px;">
+                    Xin chào, @User.Identity.Name!
+                </span>
+                <a asp-controller="Account" asp-action="Logout" style="margin-left: 10px; color: #274753; font-size: 0.9em;">(Đăng xuất)</a>
+            }
+            else
+            {
+                @* Kim Anh thêm chỗ này để hiện trên trang chủ *@
+                <a asp-controller="Account" asp-action="Login">Tài khoản</a>
+            }
             </nav>
         </header>
     <div class="container">
