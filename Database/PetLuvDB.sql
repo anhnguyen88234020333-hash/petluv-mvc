@@ -1,4 +1,7 @@
-
+-- 1. Tạo mới Database
+CREATE DATABASE PetLuvDB;
+GO
+-- 2. Bắt buộc sử dụng đúng PetLuvDB
 USE PetLuvDB;
 GO
 DROP TABLE IF EXISTS Cart;
@@ -12,7 +15,7 @@ CREATE TABLE Users (
     Password NVARCHAR(100),
     Role NVARCHAR(20)
 );
-
+-- 3. Tạo bảng Sản phẩm
 CREATE TABLE Products (
     ProductID INT PRIMARY KEY IDENTITY(1,1),
     ProductName NVARCHAR(100),
@@ -40,8 +43,21 @@ CREATE TABLE Cart (
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
 INSERT INTO Products (ProductName, Price, Stock, Description, ImageURL, Category)
-VALUES
-(N'Thức ăn cho chó Pedigree', 120000, 15, N'Thức ăn dinh dưỡng cho chó trưởng thành', '~/images/products/pedigree.jpg', N'Thức ăn'),
-(N'Sữa tắm cho mèo', 85000, 20, N'Sữa tắm giúp lông mèo mềm mượt', '~/images/products/cat-shampoo.jpg', N'Spa'),
-(N'Pate cho mèo Whiskas', 25000, 30, N'Pate vị cá ngừ dành cho mèo', '~/images/products/whiskas-pate.jpg', N'Thức ăn');
+VALUES 
+(N'SmartHeart Adult Dog Food', 100000, 50, N'Dinh dưỡng hoàn chỉnh cho chó trưởng thành.', '~/images/products/1-hat-cho-adult-smartheart.jpg', N'Thức ăn chó'),
+(N'Hạt hữu cơ ANF vị cừu', 120000, 30, N'Thành phần hữu cơ, tốt cho da và tiêu hóa.', '~/images/products/2-hat-cho-anf-vi-cuu.jpg', N'Thức ăn chó'),
+(N'Royal Canin Mini Puppy', 185000, 25, N'Dành cho chó con cỡ nhỏ dưới 10 tháng tuổi.', '~/images/products/3-hat-cho-con-royal-canin.jpg', N'Thức ăn chó'),
+(N'Today Dinner Puppy', 350000, 15, N'Hạt dinh dưỡng cao cấp vị gà thơm ngon.', '~/images/products/4-hat-cho-con-today-dinner.jpg', N'Thức ăn chó'),
+(N'LuvCare cho chó trưởng thành', 210000, 20, N'Giúp lông bóng mượt và giảm mùi hôi chất thải.', '~/images/products/5-hat-cho-luv-care-truong-thanh.jpg', N'Thức ăn chó'),
+(N'Nutrience vị cừu cho chó', 280000, 15, N'Công thức từ Canada, giàu đạm động vật.', '~/images/products/6-hat-cho-nutrience-vi-cuu.jpg', N'Thức ăn chó'),
+(N'Reflex vị cá hồi cho chó', 190000, 20, N'Bổ sung Omega 3 & 6 cho bộ lông khỏe mạnh.', '~/images/products/7-hat-cho-reflex-vi-ca-hoi.jpg', N'Thức ăn chó'),
+(N'Pedigree cho chó trưởng thành', 130000, 40, N'Hạt vị bò và rau củ, cung cấp đủ năng lượng.', '~/images/products/8-hat-cho-truong-thanh-pedigree.jpg', N'Thức ăn chó'),
+(N'Hạt Cat Eye All Stages', 160000, 35, N'Hạt cho mèo mọi lứa tuổi, giúp kiểm soát búi lông.', '~/images/products/9-hat-meo-cat-eye.jpg', N'Thức ăn mèo'),
+(N'Whiskas cho mèo con', 30000, 100, N'Pate và hạt cung cấp Canxi cho mèo phát triển.', '~/images/products/10-hat-meo-con-whiskas.jpg', N'Thức ăn mèo'),
+(N'Thức ăn mèo Me-O', 95000, 50, N'Vị cá thu thơm ngon, kích thích vị giác của mèo.', '~/images/products/11-hat-meo-meo.jpg', N'Thức ăn mèo'),
+(N'Hạt Minino cho mèo', 85000, 45, N'Dinh dưỡng cân bằng theo tiêu chuẩn Pháp.', '~/images/products/12-hat-meo-minino.jpg', N'Thức ăn mèo'),
+(N'Hạt Mr. Vet cho mèo', 110000, 25, N'Hạt cao cấp giúp tăng cường hệ miễn dịch.', '~/images/products/13-hat-meo-mr-vet.jpg', N'Thức ăn mèo'),
+(N'Nutrience cho mèo', 250000, 15, N'Nguồn nguyên liệu tự nhiên, không ngũ cốc.', '~/images/products/14-hat-meo-nutrience.jpg', N'Thức ăn mèo'),
+(N'Hạt Reflex cho mèo', 180000, 30, N'Cân bằng dinh dưỡng, hỗ trợ hệ tiết niệu.', '~/images/products/15-hat-meo-reflex.jpg', N'Thức ăn mèo'),
+(N'Royal Canin cho mèo', 230000, 20, N'Sản phẩm chuyên biệt cho các dòng mèo khác nhau.', '~/images/products/16-hat-meo-royal-canin.jpg', N'Thức ăn mèo');
 

@@ -58,23 +58,32 @@
                     <th style="width: 15%;">Giá bán</th>
                     <th style="width: 15%;" class="text-center">Hình ảnh</th>
                     <th style="width: 50%;">Mô tả</th> </tr>
-            </thead>
+            </thead>         
             <tbody>
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td class="align-middle" style="word-wrap: break-word;">@item.ProductName</td>
+                        <td class="align-middle" style="word-wrap: break-word;">
+                            <a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductID" class="text-decoration-none fw-bold text-dark">
+                                @item.ProductName
+                            </a>
+                        </td>
+
                         <td class="align-middle price-text">@item.Price.ToString("N0") VNĐ</td>
+
                         <td class="text-center align-middle">
                             @if (!string.IsNullOrEmpty(item.ImageURL))
                             {
-                                <img src="/images/@item.ImageURL" class="product-img" alt="@item.ProductName" />
+                                <a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductID">
+                                    <img src="@Url.Content(item.ImageURL)" class="product-img" alt="@item.ProductName" />
+                                </a>
                             }
                             else
                             {
                                 <span class="text-muted">Không có ảnh</span>
                             }
                         </td>
+
                         <td class="description-cell text-muted">
                             @item.Description
                         </td>

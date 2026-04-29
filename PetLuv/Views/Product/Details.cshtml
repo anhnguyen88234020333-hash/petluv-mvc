@@ -1,0 +1,35 @@
+﻿@model PetLuv.Models.Product
+
+@{
+    ViewData["Title"] = "Chi tiết sản phẩm PetLuv";
+}
+
+<div class="container mt-5">
+    <div class="row shadow p-4 rounded bg-white">
+        <div class="col-md-5 text-center">
+            <img src="@Url.Content(Model.ImageURL)" class="img-fluid rounded shadow-sm" style="max-height: 400px;" alt="@Model.ProductName" />
+        </div>
+
+        <div class="col-md-7">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">Cửa hàng</a></li>
+                    <li class="breadcrumb-item active">@Model.Category</li>
+                </ol>
+            </nav>
+
+            <h1 class="fw-bold text-primary">@Model.ProductName</h1>
+            <h2 class="text-danger my-3">@Model.Price.ToString("N0") VNĐ</h2>
+
+            <div class="p-3 bg-light rounded">
+                <p><strong>Trạng thái:</strong> <span class="text-success">Còn hàng (@Model.Stock)</span></p>
+                <p><strong>Mô tả ngắn:</strong> @Model.Description</p>
+            </div>
+
+            <div class="mt-4">
+                <button class="btn btn-warning btn-lg px-5 fw-bold">THÊM VÀO GIỎ</button>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-lg ms-2">Quay lại</a>
+            </div>
+        </div>
+    </div>
+</div>
