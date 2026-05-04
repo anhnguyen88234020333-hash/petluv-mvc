@@ -11,6 +11,8 @@ namespace PetLuv.Data
         
         // Phụng nhớ phải có dòng này thì trang Đăng nhập mới chạy được nè!
         public DbSet<User> Users { get; set; } 
+        // Thêm dòng này để Entity Framework hiểu và tạo bảng Cart
+        public DbSet<Cart> Carts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
