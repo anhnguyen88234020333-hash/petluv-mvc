@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PetLuv.Data; // Đảm bảo đúng namespace Data của nhóm bạn nhé
+using PetLuv.Data;
+using PetLuv.Models; // Ngọc nhớ thêm dòng này để nó hiểu bảng Cart và Product
 
 namespace PetLuv.Controllers
 {
@@ -13,23 +14,50 @@ namespace PetLuv.Controllers
             _context = context;
         }
 
-        // GET: /Cart
+        // 1. Hiển thị trang Giỏ hàng
         public async Task<IActionResult> Index()
         {
-            // Chúng ta lấy đúng UserId = 1 như trong SQL của bạn
-            int currentUserId = 1;
+            int currentUserId = 1; // Giả lập User ID của Ngọc
 
             var cartItems = await _context.Carts
-                .Include(c => c.Product) // Đưa thông tin sản phẩm vào
+                .Include(c => c.Product)
                 .Where(c => c.UserId == currentUserId)
                 .ToListAsync();
 
             return View(cartItems);
         }
 
-        // ================= THÊM TỪ ĐÂY =================
+        // 2. HÀM QUAN TRỌNG: Tiếp nhận yêu cầu "Thêm vào giỏ" từ các nút bấm
+        public async Task<IActionResult> AddToCart(int productId)
+        {
+            int currentUserId = 1;
 
-        // Action: Cập nhật số lượng sản phẩm trong giỏ hàng
+            // Kiểm tra xem món này đã có trong giỏ chưa
+            var cartItem = await _context.Carts
+                .FirstOrDefaultAsync(c => c.UserId == currentUserId && c.ProductId == productId);
+
+            if (cartItem == null)
+            {
+                // Nếu chưa có: Tạo mới
+                var newItem = new Cart
+                {
+                    UserId = currentUserId,
+                    ProductId = productId,
+                    Quantity = 1
+                };
+                _context.Carts.Add(newItem);
+            }
+            else
+            {
+                // Nếu có rồi: Tăng số lượng lên 1
+                cartItem.Quantity += 1;
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index)); // Thêm xong nhảy thẳng vào trang giỏ hàng luôn
+        }
+
+        // 3. Cập nhật số lượng
         [HttpPost]
         public async Task<IActionResult> UpdateQuantity(int cartId, int quantity)
         {
@@ -42,8 +70,7 @@ namespace PetLuv.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Action: Xóa sản phẩm khỏi giỏ hàng
-        [HttpPost]
+        // 4. Xóa sản phẩm khỏi giỏ
         public async Task<IActionResult> RemoveFromCart(int cartId)
         {
             var cartItem = await _context.Carts.FindAsync(cartId);
@@ -54,7 +81,5 @@ namespace PetLuv.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-
-        // ================= HẾT ĐOẠN THÊM =================
     }
 }
