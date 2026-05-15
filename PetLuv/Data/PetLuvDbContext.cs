@@ -13,6 +13,7 @@ namespace PetLuv.Data
         public DbSet<User> Users { get; set; } 
         // Thêm dòng này để Entity Framework hiểu và tạo bảng Cart
         public DbSet<Cart> Carts { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
