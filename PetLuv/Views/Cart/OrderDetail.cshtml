@@ -1,0 +1,25 @@
+@model IEnumerable<PetLuv.Models.OrderDetail>
+<div class="container mt-5">
+    <h3 class="mb-4">Chi tiết đơn hàng #@ViewBag.OrderId</h3>
+    <table class="table border">
+        <thead class="table-light">
+            <tr>
+                <th>Sản phẩm</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model) {
+                <tr>
+                    <td>@item.Product.ProductName</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Price.ToString("N0") VNĐ</td>
+                    <td>@((item.Price * item.Quantity).ToString("N0")) VNĐ</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a href="/Cart/MyOrders" class="btn btn-secondary">Quay lại</a>
+</div>

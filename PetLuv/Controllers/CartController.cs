@@ -147,5 +147,29 @@ namespace PetLuv.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        // 7. Hiển thị danh sách đơn hàng đã đặt (Deadline 19/05)
+public async Task<IActionResult> MyOrders()
+{
+    int currentUserId = 1; // Giả lập User ID như cũ
+
+    // Lấy danh sách đơn hàng của khách hàng này
+    // Lưu ý: Nếu bảng Orders của Phụng chưa có UserId, mình sẽ lấy tất cả đơn hàng để test trước
+    var orders = await _context.Orders
+        .OrderByDescending(o => o.OrderDate)
+        .ToListAsync();
+
+    return View(orders);
+}
+public async Task<IActionResult> OrderDetail(int id)
+{
+    var details = await _context.OrderDetails
+        .Include(od => od.Product)
+        .Where(od => od.OrderID == id)
+        .ToListAsync();
+
+    ViewBag.OrderId = id;
+    return View(details);
+}
     }
+
 }
