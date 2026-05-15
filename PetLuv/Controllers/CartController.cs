@@ -81,5 +81,71 @@ namespace PetLuv.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        // 5. PHẦN CỦA PHỤNG: Hiển thị trang nhập địa chỉ (Checkout)
+        public async Task<IActionResult> Checkout()
+        {
+            int currentUserId = 1;
+
+            var cartItems = await _context.Carts
+                .Include(c => c.Product)
+                .Where(c => c.UserId == currentUserId)
+                .ToListAsync();
+
+            if (cartItems.Count == 0)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(cartItems);
+        }
+        // 6. PHẦN CỦA PHỤNG: Xử lý đặt hàng thực tế (Lưu Order & OrderDetail)
+        [HttpPost]
+        public async Task<IActionResult> ProcessOrder(string CustomerName, string Phone, string Address)
+        {
+            int currentUserId = 1;
+
+            var cartItems = await _context.Carts
+                .Include(c => c.Product)
+                .Where(c => c.UserId == currentUserId)
+                .ToListAsync();
+
+            if (cartItems.Count > 0)
+            {
+                // Bước A: Tạo Order mới
+                var order = new Order
+                {
+                    OrderDate = DateTime.Now,
+                    CustomerName = CustomerName,
+                    Address = Address,
+                    Phone = Phone,
+                    TotalAmount = cartItems.Sum(c => (c.Product.Price * c.Quantity)),
+                    Status = 0 
+                };
+
+                _context.Orders.Add(order);
+                await _context.SaveChangesAsync(); // Lưu để lấy OrderID
+
+                // Bước B: Lưu chi tiết vào OrderDetail
+                foreach (var item in cartItems)
+                {
+                    var detail = new OrderDetail
+                    {
+                        OrderID = order.OrderID,
+                        ProductID = item.ProductId,
+                        Quantity = item.Quantity,
+                        Price = item.Product.Price
+                    };
+                    _context.OrderDetails.Add(detail);
+                }
+
+                // Bước C: Xóa giỏ hàng sau khi đặt thành công
+                _context.Carts.RemoveRange(cartItems);
+                await _context.SaveChangesAsync();
+
+                return View("OrderSuccess", (object)CustomerName);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

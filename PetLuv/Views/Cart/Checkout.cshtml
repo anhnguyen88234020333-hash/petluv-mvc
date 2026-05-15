@@ -1,0 +1,46 @@
+@model IEnumerable<PetLuv.Models.Cart>
+
+<div class="container mt-5" style="padding-bottom: 100px;">
+    <h2 class="text-center mb-4">THÔNG TIN THANH TOÁN</h2>
+    
+    <div class="row">
+        <div class="col-md-7">
+            <div class="card shadow-sm p-4">
+                <form asp-action="ProcessOrder" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Họ và tên người nhận</label>
+                        <input name="CustomerName" class="form-control" placeholder="Nhập họ tên..." required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Số điện thoại</label>
+                        <input name="Phone" class="form-control" placeholder="Nhập số điện thoại..." required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Địa chỉ giao hàng</label>
+                        <textarea name="Address" class="form-control" rows="3" placeholder="Địa chỉ cụ thể..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">XÁC NHẬN ĐẶT HÀNG (COD)</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card shadow-sm p-4 bg-light">
+                <h4>Đơn hàng của bạn</h4>
+                <hr />
+                @foreach (var item in Model)
+                {
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>@item.Product.ProductName (x@item.Quantity)</span>
+                        <span>@((item.Product.Price * item.Quantity).ToString("N0")) VNĐ</span>
+                    </div>
+                }
+                <hr />
+                <div class="d-flex justify-content-between">
+                    <strong>Tổng cộng:</strong>
+                    <strong class="text-danger">@Model.Sum(i => i.Product.Price * i.Quantity).ToString("N0") VNĐ</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

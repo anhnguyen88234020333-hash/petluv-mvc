@@ -79,7 +79,9 @@
                     <p class="mb-1">Tổng cộng thanh toán:</p>
                     <span class="total-price">@Model.Sum(i => i.Product.Price * i.Quantity).ToString("N0") VNĐ</span>
                     <br />
-                    <button class="btn btn-success btn-lg mt-2">Thanh toán ngay</button>
+                <a asp-controller="Cart" asp-action="Checkout" class="btn btn-success btn-lg mt-2">
+   <i class="bi bi-credit-card"></i> Thanh toán ngay
+</a>
                 </div>
             </div>
         </div>
