@@ -1,0 +1,44 @@
+﻿@model IEnumerable<PetLuv.Models.User>
+
+@{
+    ViewData["Title"] = "Quản Lý Thành Viên - PetLuv";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 style="color: #512773; font-weight: bold;">👥 Quản Lý Danh Sách Thành Viên</h2>
+        <a asp-controller="Admin" asp-action="Index" class="btn btn-outline-secondary">⬅ Quay lại Đơn hàng</a>
+    </div>
+
+    <table class="table table-bordered table-hover shadow-sm bg-white">
+        <thead class="table-dark" style="background-color: #274753;">
+            <tr class="text-center">
+                <th>ID</th>
+                <th>Họ và Tên</th>
+                <th>Email</th>
+                <th>Vai trò (Role)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                    <tr class="text-center align-middle">
+                        <td>#@user.Id</td>
+                        <td class="text-start fw-bold">@user.FullName</td>
+                        <td class="text-start">@user.Email</td>
+                        <td>
+                        @if (user.Role == "Admin")
+                        {
+                            <span class="badge bg-danger">Quản trị viên (Admin)</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-info text-dark">Khách hàng (Customer)</span>
+                        }
+                        </td>
+                    </tr>
+            }
+        </tbody>
+    </table>
+</div>

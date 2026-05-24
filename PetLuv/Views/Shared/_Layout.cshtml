@@ -8,43 +8,126 @@
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PetLuv.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ✨ Ép Font chữ mới áp dụng cho toàn bộ dự án */
+        * {
+            font-family: 'Nunito', sans-serif !important;
+        }
+
+        body {
+            background-color: #FFF6F0; /* Màu nền kem beige */
+        }
+
+        /* 👑 TÚT LẠI HEADER: Chuyển sang màu tím kem nhạt và dập thêm line tím thương hiệu dứt khoát */
+        .custom-navbar {
+            background-color: #F5EEF9 !important; /* Màu tím kem siêu nhạt giúp nổi bật hẳn lên */
+            border-bottom: 3px solid #512773; /* Thêm đường kẻ line màu tím thương hiệu */
+            padding: 15px 0;
+        }
+
+        .custom-nav-link {
+            color: #512773 !important; /* Chữ màu tím */
+            font-weight: 700; /* Tăng độ đậm lên xíu cho rõ chữ */
+            margin: 0 12px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+            .custom-nav-link:hover {
+                color: #ffc107 !important; /* Di chuột vào đổi sang màu vàng ấm */
+                transform: translateY(-1px); /* Hiệu ứng nổi nhẹ khi rê chuột */
+            }
+
+        .custom-footer {
+            background-color: #512773 !important; /* Đắp chân trang màu tím */
+            color: #FFF6F0 !important;
+        }
+
+            .custom-footer a {
+                color: #ffc107 !important;
+                text-decoration: none;
+            }
+
+                .custom-footer a:hover {
+                    text-decoration: underline;
+                }
+    </style>
 </head>
-<body>
-        <header class="header">
-            <img src="~/images/logo/logo.svg" alt="logo" width="100">
+<body class="d-flex flex-column min-vh-100">
 
-            <nav>
-            <a asp-controller="Home" asp-action="Index">Trang chủ</a>
-            <a asp-controller="Product" asp-action="Index">Sản phẩm</a>
-            <a asp-controller="Cart" asp-action="Index">Giỏ hàng</a>
-            <a asp-controller="Cart" asp-action="MyOrders">Đơn hàng</a>
+    <header>
+        <nav class="navbar navbar-expand-lg shadow-sm custom-navbar">
+            <div class="container d-flex justify-content-between align-items-center">
 
-            @* Đoạn logic kiểm tra đăng nhập Kim Anh *@
-            @if (User.Identity != null && User.Identity.IsAuthenticated)
-            {
-                <span style="color: #512773; font-weight: bold; margin-left: 15px;">
-                    Xin chào, Boss của PetLuv! 🐾
-                </span>
-                <a asp-controller="Account" asp-action="Logout" style="margin-left: 10px; color: #274753; font-size: 0.9em;">(Đăng xuất)</a>
-            }
-            else
-            {
-                @* Kim Anh thêm chỗ này để hiện trên trang chủ *@
-                <a asp-controller="Account" asp-action="Login">Tài khoản</a>
-            }
-            </nav>
-        </header>
-    <div class="container">
+                <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/logo/logo.svg" alt="logo" width="120">
+                </a>
+
+                <div class="d-flex align-items-center">
+                    <a class="custom-nav-link" asp-controller="Home" asp-action="Index">Trang chủ</a>
+                    <a class="custom-nav-link" asp-controller="Product" asp-action="Index">Sản phẩm</a>
+                    <a class="custom-nav-link" asp-controller="Cart" asp-action="Index">Giỏ hàng</a>
+                    <a class="custom-nav-link" asp-controller="Cart" asp-action="MyOrders">Đơn hàng</a>
+
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        <span class="badge bg-white px-3 py-2 ms-3 border shadow-sm" style="color: #512773 !important; font-weight: bold; border-radius: 15px; border-color: #512773 !important;">
+                            🐾 Xin chào, Boss!
+                        </span>
+                        <a class="ms-2 small text-muted fw-bold" asp-controller="Account" asp-action="Logout" style="text-decoration: none;">(Đăng xuất)</a>
+                    }
+                    else
+                    {
+                        <a class="btn text-white ms-3 px-3 shadow-sm" asp-controller="Account" asp-action="Login" style="background-color: #512773; border-radius: 20px; font-weight: 700;">
+                            Tài khoản
+                        </a>
+                    }
+                </div>
+
+            </div>
+        </nav>
+    </header>
+
+    <div class="container my-5 flex-grow-1">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - PetLuv - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="custom-footer py-4 mt-auto border-top">
+        <div class="container text-center text-md-start">
+            <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5 class="fw-bold text-warning">🐾 PET LUV</h5>
+                    <p class="small text-white-50">Hệ thống dịch vụ Spa, Hotel và Cửa hàng phụ kiện thú cưng cao cấp phục vụ các boss tận tâm.</p>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0 text-md-center">
+                    <h5 class="fw-bold text-white">Liên hệ</h5>
+                    <ul class="list-unstyled small text-white-50">
+                        <li>Địa chỉ: 279 Nguyễn Tri Phương, Phường Diên Hồng</li>
+                        <li>Điện thoại: 028585878</li>
+                    </ul>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <h5 class="fw-bold text-white">Đồ án môn học</h5>
+                    <p class="small mb-1 text-white-50">Phát triển ứng dụng thương mại điện tử</p>
+                    <p class="small text-warning fw-bold">Thực hiện: Bảo Ngọc - Kim Anh - Mỹ Phụng</p>
+                </div>
+            </div>
+            <hr class="bg-white-50 my-3">
+            <div class="d-flex justify-content-between small text-white-50">
+                <div>&copy; 2026 - PetLuv Project. All rights reserved.</div>
+                <div><a asp-controller="Home" asp-action="Privacy">Chính sách bảo mật (Privacy)</a></div>
+            </div>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

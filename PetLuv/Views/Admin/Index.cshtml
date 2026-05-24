@@ -1,3 +1,5 @@
+@model IEnumerable<PetLuv.Models.Order>
+
 @{
     ViewData["Title"] = "Trang Quản Trị - PetLuv";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,13 +9,90 @@
     <div class="p-5 mb-4 bg-light rounded-3 shadow border border-info">
         <h1 class="display-5 fw-bold">🐾 Chào mừng Boss của PetLuv!</h1>
         <p class="col-md-8 fs-4 mx-auto">
-            Mọi thứ đã sẵn sàng để bạn quản lý cửa hàng rồi. 
+            Mọi thứ đã sẵn sàng để bạn quản lý cửa hàng rồi.
             Hãy cùng nhóm mình chăm sóc các bé thú cưng thật tốt nhé!
         </p>
         <hr class="my-4">
+        <hr class="my-4">
+
+        <div class="mb-4">
+            <a asp-controller="Admin" asp-action="Index" class="btn btn-primary btn-lg me-3 shadow-sm" style="background-color: #512773; border: none;">
+                🧾 Quản Lý Đơn Hàng
+            </a>
+            <a asp-controller="Admin" asp-action="UsersList" class="btn btn-info btn-lg text-white shadow-sm">
+                👥 Quản Lý Thành Viên
+            </a>
+        </div>
         <div class="d-flex justify-content-center align-items-center">
             <span class="badge bg-success p-2 me-2">Quyền truy cập: Administrator</span>
-            <span class="text-muted small">Cập nhật: 07/05/2026</span>
+            <span class="text-muted small">Cập nhật: 24/05/2026</span>
         </div>
     </div>
+</div>
+
+<div class="container mt-5">
+    <h3 class="mb-4 text-start" style="color: #512773; font-weight: bold;">Danh Sách Quản Lý Đơn Hàng 🧾</h3>
+
+    <table class="table table-bordered table-hover shadow-sm bg-white">
+        <thead class="table-dark" style="background-color: #274753;">
+            <tr class="text-center align-middle">
+                <th>Mã Đơn</th>
+                <th>Ngày Đặt</th>
+                <th>Khách Hàng</th>
+                <th>Tổng Tiền</th>
+                <th>Trạng Thái Hiện Tại</th>
+                <th>Thao Tác (Đổi trạng thái)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr class="text-center align-middle">
+                        <td><strong>#@item.OrderID</strong></td>
+                        <td>@item.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@item.CustomerName</td>
+                        <td class="text-danger fw-bold">@item.TotalAmount.ToString("N0") đ</td>
+                        <td>
+                            @if (item.Status == 0)
+                            {
+                                <span class="badge bg-warning text-dark">Chờ xử lý ⏳</span>
+                            }
+                            else if (item.Status == 1)
+                            {
+                                <span class="badge bg-primary">Đang giao 🚚</span>
+                            }
+                            else if (item.Status == 2)
+                            {
+                                <span class="badge bg-success">Đã giao ✔️</span>
+                            }
+                            else if (item.Status == 3)
+                            {
+                                <span class="badge bg-danger">Đã hủy ❌</span>
+                            }
+                        </td>
+                        <td>
+                            <form asp-controller="Admin" asp-action="UpdateOrderStatus" method="post" class="d-inline">
+                                <input type="hidden" name="orderId" value="@item.OrderID" />
+
+                                <select name="newStatus" onchange="this.form.submit()" class="form-select form-select-sm d-inline-block" style="width: auto; cursor: pointer;">
+                                    <option value="0" selected="@(item.Status == 0)">Chờ xử lý</option>
+                                    <option value="1" selected="@(item.Status == 1)">Đang giao</option>
+                                    <option value="2" selected="@(item.Status == 2)">Đã giao</option>
+                                    <option value="3" selected="@(item.Status == 3)">Hủy đơn hàng</option>
+                                </select>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="text-center text-muted p-4">Hiện tại hệ thống chưa có đơn hàng nào.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

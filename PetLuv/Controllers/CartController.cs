@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetLuv.Data;
-using PetLuv.Models; // Ngọc nhớ thêm dòng này để nó hiểu bảng Cart và Product
+using PetLuv.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PetLuv.Controllers
 {
@@ -17,7 +18,7 @@ namespace PetLuv.Controllers
         // 1. Hiển thị trang Giỏ hàng
         public async Task<IActionResult> Index()
         {
-            int currentUserId = 1; // Giả lập User ID của Ngọc
+            int currentUserId = 1; // Giả lập User ID
 
             var cartItems = await _context.Carts
                 .Include(c => c.Product)
@@ -119,7 +120,7 @@ namespace PetLuv.Controllers
                     Address = Address,
                     Phone = Phone,
                     TotalAmount = cartItems.Sum(c => (c.Product.Price * c.Quantity)),
-                    Status = 0 
+                    Status = 0
                 };
 
                 _context.Orders.Add(order);
@@ -147,29 +148,30 @@ namespace PetLuv.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-        // 7. Hiển thị danh sách đơn hàng đã đặt (Deadline 19/05)
-public async Task<IActionResult> MyOrders()
-{
-    int currentUserId = 1; // Giả lập User ID như cũ
+        // 7. Hiển thị danh sách đơn hàng đã đặt
+        // 7. Hiển thị danh sách đơn hàng đã đặt
+        [Authorize] // 🔐 Khóa trang danh sách đơn hàng
+        public async Task<IActionResult> MyOrders()
+        {
+            int currentUserId = 1; // Giả lập User ID như cũ
 
-    // Lấy danh sách đơn hàng của khách hàng này
-    // Lưu ý: Nếu bảng Orders của Phụng chưa có UserId, mình sẽ lấy tất cả đơn hàng để test trước
-    var orders = await _context.Orders
-        .OrderByDescending(o => o.OrderDate)
-        .ToListAsync();
+            var orders = await _context.Orders
+                .OrderByDescending(o => o.OrderDate)
+                .ToListAsync();
 
-    return View(orders);
-}
-public async Task<IActionResult> OrderDetail(int id)
-{
-    var details = await _context.OrderDetails
-        .Include(od => od.Product)
-        .Where(od => od.OrderID == id)
-        .ToListAsync();
+            return View(orders);
+        }
 
-    ViewBag.OrderId = id;
-    return View(details);
-}
+        [Authorize] // 🔐 Khóa luôn trang xem chi tiết từng đơn hàng
+        public async Task<IActionResult> OrderDetail(int id)
+        {
+            var details = await _context.OrderDetails
+                .Include(od => od.Product)
+                .Where(od => od.OrderID == id)
+                .ToListAsync();
+
+            ViewBag.OrderId = id;
+            return View(details);
+        }
     }
-
 }

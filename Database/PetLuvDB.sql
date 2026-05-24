@@ -61,3 +61,81 @@ VALUES
 (N'Hạt Reflex cho mèo', 180000, 30, N'Cân bằng dinh dưỡng, hỗ trợ hệ tiết niệu.', '~/images/products/15-hat-meo-reflex.jpg', N'Thức ăn mèo'),
 (N'Royal Canin cho mèo', 230000, 20, N'Sản phẩm chuyên biệt cho các dòng mèo khác nhau.', '~/images/products/16-hat-meo-royal-canin.jpg', N'Thức ăn mèo');
 
+--fix trang chủ
+USE master;
+GO
+ALTER DATABASE PetLuvDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+DROP DATABASE PetLuvDB;
+
+USE PetLuvDB;
+GO
+
+-- Bước 1: Xóa toàn bộ dữ liệu cũ để làm mới lại từ đầu
+DELETE FROM Products;
+
+-- Bước 2: Reset con số ID quay về số 0 để khi nạp món mới nó sẽ bắt đầu từ 1
+DBCC CHECKIDENT ('Products', RESEED, 0);
+
+-- Bước 3: Nạp lại 4 sản phẩm theo đúng thứ tự Ngọc vừa dò
+INSERT INTO Products (ProductName, Price, Stock, Description, ImageURL, Category)
+VALUES 
+(N'SmartHeart Adult Dog Food', 100000, 30, N'Dinh dưỡng hoàn chỉnh cho chó trưởng thành.', '~/images/products/1-hat-cho-adult-smartheart.jpg', N'Thức ăn'), -- Sẽ có ID = 1
+(N'Hạt hữu cơ ANF 6 vị cừu', 99000, 40, N'Sản phẩm hữu cơ tốt cho tiêu hóa của cún.', '~/images/products/2-hat-cho-anf-vi-cuu.jpg', N'Thức ăn'), -- Sẽ có ID = 2
+(N'Royal Canin Mini Puppy', 185000, 25, N'Hạt dành riêng cho chó con cỡ nhỏ.', '~/images/products/3-hat-cho-con-royal-canin.jpg', N'Thức ăn'), -- Sẽ có ID = 3
+(N'Today Dinner Puppy', 350000, 10, N'Thức ăn cao cấp vị gà thơm ngon.', '~/images/products/4-hat-cho-con-today-dinner.jpg', N'Thức ăn'); -- Sẽ có ID = 4
+
+--fix giỏ hàng
+USE PetLuvDB;
+GO
+
+ALTER TABLE Cart
+ADD DateAdded DATETIME DEFAULT GETDATE();
+
+USE PetLuvDB;
+GO
+
+-- Kiểm tra và thêm người dùng số 1 nếu chưa có
+IF NOT EXISTS (SELECT 1 FROM Users WHERE UserID = 1)
+BEGIN
+    SET IDENTITY_INSERT Users ON; -- Cho phép tự điền ID là 1
+    INSERT INTO Users (UserID, FullName, Email, Password, Role) 
+    VALUES (1, N'Khổng Bảo Ngọc', 'ngoc@ueh.edu.vn', '123', 'Customer');
+    SET IDENTITY_INSERT Users OFF;
+END
+
+--fix data của chi tiết đơn hàng
+USE PetLuvDB;
+GO
+-- Thêm các cột còn thiếu để khớp hoàn toàn với code C# của nhóm
+ALTER TABLE dbo.Orders ADD CustomerName NVARCHAR(255) NULL;
+ALTER TABLE dbo.Orders ADD Address NVARCHAR(MAX) NULL;
+ALTER TABLE dbo.Orders ADD Phone VARCHAR(50) NULL;
+ALTER TABLE dbo.Orders ADD Status INT NOT NULL DEFAULT 0;
+GO
+
+USE PetLuvDB;
+GO
+
+-- Tạo bảng OrderDetails thực tế dưới SQL Server cho khớp với file OrderDetail.cs bên Visual
+CREATE TABLE [dbo].[OrderDetails] (
+    [OrderDetailID] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    [OrderID] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Orders]([OrderID]),
+    [ProductID] INT NOT NULL,
+    [Quantity] INT NOT NULL,
+    [Price] DECIMAL(18,2) NOT NULL
+);
+GO
+
+USE PetLuvDB;
+GO
+
+-- Nạp tài khoản Admin
+INSERT INTO dbo.Users (FullName, Email, Password, Role)
+VALUES (N'Admin PetLuv', 'petluv@gmail.com', '123456', 'Admin');
+GO
+
+--Thêm tài khoản
+USE PetLuvDB;
+GO
+UPDATE dbo.Users SET Role = 'Admin' WHERE Email = '1304.khongngoc@gmail.com';
+GO

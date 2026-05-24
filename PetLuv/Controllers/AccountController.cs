@@ -30,6 +30,7 @@ namespace PetLuv.Controllers
                 var userExist = _context.Users.Any(u => u.Email == model.Email);
                 if (userExist)
                 {
+                    // Lỗi email tồn tại
                     ModelState.AddModelError("", "Email này có người dùng rồi bae ơi!");
                     return View(model);
                 }
@@ -64,13 +65,26 @@ namespace PetLuv.Controllers
 
                 if (user != null)
                 {
-                    // Tạo (Cookie) để web nhớ mình
-                    var claims = new List<Claim> { new Claim(ClaimTypes.Name, user.FullName??"") };
+                    // Tạo thẻ bài thông tin và cấp quyền Admin luôn
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, user.FullName ?? ""),
+                        new Claim(ClaimTypes.Email, user.Email),
+                        new Claim(ClaimTypes.Role, "Admin") // Phát thẻ Admin để Phụng cho qua cửa bảo vệ
+                    };
+
                     var claimsIdentity = new ClaimsIdentity(claims, "CookieAuth");
 
                     await HttpContext.SignInAsync("CookieAuth", new ClaimsPrincipal(claimsIdentity));
 
-                    return RedirectToAction("Index", "Home"); // Đăng nhập xong thì về trang chủ
+                    // KIỂM TRA: Nếu là Admin thực thụ thì cho vào trang quản trị Admin liền
+                    if (user.Role == "Admin")
+                    {
+                        return RedirectToAction("Index", "Admin");
+                    }
+
+                    // Còn nếu là Khách hàng bình thường thì mới cho về trang chủ Home mua hàng
+                    return RedirectToAction("Index", "Home");
                 }
 
                 ModelState.AddModelError("", "Sai Email hoặc Mật khẩu rồi bae!");
@@ -83,6 +97,76 @@ namespace PetLuv.Controllers
         {
             await HttpContext.SignOutAsync("CookieAuth");
             return RedirectToAction("Index", "Home");
+        }
+
+        // --- PHẦN ĐỔI MẬT KHẨU ---
+
+        [HttpGet]
+        public IActionResult ChangePassword() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(string oldPassword, string newPassword, string confirmPassword)
+        {
+            // 1. Kiểm tra xem người dùng đã đăng nhập chưa thông qua Email lưu trong Cookie
+            var userEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return RedirectToAction("Login");
+            }
+
+            // 2. Tìm người dùng đó trong Database
+            var user = _context.Users.FirstOrDefault(u => u.Email == userEmail);
+            if (user == null || user.Password != oldPassword)
+            {
+                ModelState.AddModelError("", "Mật khẩu cũ không chính xác nha bae!");
+                return View();
+            }
+
+            // 3. Kiểm tra mật khẩu mới có khớp nhau không
+            if (newPassword != confirmPassword)
+            {
+                ModelState.AddModelError("", "Mật khẩu mới nhập lại không khớp kìa!");
+                return View();
+            }
+
+            // 4. Tiến hành cập nhật và lưu xuống SQL Server
+            user.Password = newPassword;
+            await _context.SaveChangesAsync();
+
+            ViewBag.SuccessMessage = "Đổi mật khẩu thành công rồi nè! 🎉";
+            return View();
+        }
+
+        // PHẦN QUÊN MẬT KHẨU ---
+
+        [HttpGet]
+        public IActionResult ForgotPassword() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(string email, string fullName, string newPassword, string confirmPassword)
+        {
+            // 1. Kiểm tra xem có tài khoản nào khớp cả Email và Họ tên không
+            var user = _context.Users.FirstOrDefault(u => u.Email == email && u.FullName == fullName);
+
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Thông tin Email hoặc Họ tên không khớp với hệ thống nha bae!");
+                return View();
+            }
+
+            // 2. Kiểm tra mật khẩu mới nhập lại có khớp nhau không
+            if (newPassword != confirmPassword)
+            {
+                ModelState.AddModelError("", "Mật khẩu mới nhập lại không khớp kìa!");
+                return View();
+            }
+
+            // 3. Cập nhật mật khẩu mới vào SQL Server
+            user.Password = newPassword;
+            await _context.SaveChangesAsync();
+
+            ViewBag.SuccessMessage = "Đặt lại mật khẩu thành công! Giờ bạn có thể đăng nhập bằng mật khẩu mới rồi đó. 🎉";
+            return View();
         }
     }
 }

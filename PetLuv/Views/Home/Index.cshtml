@@ -3,32 +3,51 @@
 }
 
 <section class="banner">
-    <img src="~/images/banner/banner.png" alt="banner">
+    <img src="~/images/banner/banner.png" alt="banner" class="w-100 img-fluid">
 </section>
+
+<div class="container text-center mx-auto my-5 py-4" style="max-width: 950px;">
+    <h1 class="fw-extrabold mb-3" style="color: #512773; font-size: 3rem; font-weight: 800; letter-spacing: 1px;">
+        🐾 PET LUV
+    </h1>
+    <p class="fw-semibold text-muted mb-4 px-3" style="font-size: 1.4rem; line-height: 1.8; color: #5c436e !important;">
+        Chào mừng bạn đến với thiên đường mua sắm và dinh dưỡng cao cấp dành cho các boss! 💖 <br>
+        Tại <span style="color: #512773; font-weight: 800;">PetLuv</span>, chúng mình chuyên cung cấp các dòng
+        <span class="badge bg-white px-2 py-1 shadow-sm" style="color: #512773; border: 1px solid #512773;">Thức ăn hạt hữu cơ</span> chính hãng,
+        <span class="badge bg-white px-2 py-1 shadow-sm" style="color: #512773; border: 1px solid #512773;">Thực phẩm dinh dưỡng</span> giàu dưỡng chất
+        và các phụ kiện độc đáo nhất cho thú cưng của bạn. Cam kết mang đến những sản phẩm an toàn, chất lượng vượt trội để người bạn bốn chân luôn khỏe mạnh và tràn đầy năng lượng!
+    </p>
+
+    <div class="d-flex justify-content-center gap-3 flex-wrap mt-4">
+        <span class="badge rounded-pill bg-warning text-dark px-4 py-3 shadow-sm" style="font-size: 1.05rem; font-weight: 700; letter-spacing: 0.5px;">🌿 100% CHÍNH HÃNG</span>
+        <span class="badge rounded-pill text-white px-4 py-3 shadow-sm" style="background-color: #512773; font-size: 1.05rem; font-weight: 700; letter-spacing: 0.5px;">✨ ĐỦ DINH DƯỠNG</span>
+        <span class="badge rounded-pill bg-info text-white px-4 py-3 shadow-sm" style="font-size: 1.05rem; font-weight: 700; letter-spacing: 0.5px;">🚚 GIAO NHANH CHÓNG</span>
+    </div>
+</div>
 
 <section class="service">
     <div class="service-card">
-        <img src="~/images/services/spa-1.jpg" alt="">
-        <h3>Pet Spa & Grooming</h3>
-        <p>Chăm sóc và làm đẹp thú cưng chuyên nghiệp.</p>
+        <img src="~/images/services/spa-1.jpg" alt="Chính hãng">
+        <h3>100% Chính Hãng</h3>
+        <p>Cam kết thức ăn, hạt dinh dưỡng nhập khẩu chính ngạch, an toàn tuyệt đối.</p>
     </div>
 
     <div class="service-card">
-        <img src="~/images/services/spa-2.jpg" alt="">
-        <h3>Chăm sóc thú cưng</h3>
-        <p>Giúp thú cưng luôn sạch sẽ và khỏe mạnh.</p>
+        <img src="~/images/services/spa-2.jpg" alt="Dinh dưỡng">
+        <h3>Chuẩn Dinh Dưỡng</h3>
+        <p>Sản phẩm được chọn lọc kỹ càng, giúp boss phát triển khỏe mạnh toàn diện.</p>
     </div>
 
     <div class="service-card">
-        <img src="~/images/services/hotel-1.jpg" alt="">
-        <h3>Pet Hotel</h3>
-        <p>Lưu trú an toàn, chăm sóc 24/7.</p>
+        <img src="~/images/services/hotel-1.jpg" alt="Giao hàng">
+        <h3>Giao Hàng Siêu Tốc</h3>
+        <p>Ship nhanh nội thành, đóng gói cẩn thận để bữa ăn của boss không bị chậm trễ.</p>
     </div>
 
     <div class="service-card">
-        <img src="~/images/services/hotel-2.jpg" alt="">
-        <h3>Giữ thú cưng</h3>
-        <p>Môi trường sạch sẽ, thoải mái.</p>
+        <img src="~/images/services/hotel-2.jpg" alt="Hỗ trợ">
+        <h3>Tư Vấn Tận Tâm</h3>
+        <p>Đội ngũ PetLuv luôn sẵn sàng hỗ trợ chọn dòng hạt phù hợp nhất cho từng bé.</p>
     </div>
 </section>
 
@@ -39,6 +58,7 @@
         <a asp-controller="Product" asp-action="Details" asp-route-id="1">
             <img src="~/images/products/1-hat-cho-adult-smartheart.jpg" alt="SmartHeart">
             <h3>SmartHeart Adult Dog Food</h3>
+            <p>100.000đ / 400g</p>
         </a>
         <a asp-controller="Cart" asp-action="AddToCart" asp-route-productId="1" class="btn-add-cart">Thêm vào giỏ</a>
     </div>
