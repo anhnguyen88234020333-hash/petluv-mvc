@@ -116,16 +116,6 @@ GO
 USE PetLuvDB;
 GO
 
--- Tạo bảng OrderDetails thực tế dưới SQL Server cho khớp với file OrderDetail.cs bên Visual
-CREATE TABLE [dbo].[OrderDetails] (
-    [OrderDetailID] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    [OrderID] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[Orders]([OrderID]),
-    [ProductID] INT NOT NULL,
-    [Quantity] INT NOT NULL,
-    [Price] DECIMAL(18,2) NOT NULL
-);
-GO
-
 USE PetLuvDB;
 GO
 
