@@ -15,46 +15,65 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* ✨ Ép Font chữ mới áp dụng cho toàn bộ dự án */
+        /* Font chữ mới áp dụng cho toàn bộ dự án */
         * {
             font-family: 'Nunito', sans-serif !important;
         }
 
         body {
-            background-color: #FFF6F0; /* Màu nền kem beige */
+            background-color: #FFF6F0; /* Màu nền kem beige ấm áp */
         }
 
-        /* 👑 TÚT LẠI HEADER: Chuyển sang màu tím kem nhạt và dập thêm line tím thương hiệu dứt khoát */
+        /* 🌟 HEADER ĐỔI SANG MÀU VÀNG ẤM */
         .custom-navbar {
-            background-color: #F5EEF9 !important; /* Màu tím kem siêu nhạt giúp nổi bật hẳn lên */
-            border-bottom: 3px solid #512773; /* Thêm đường kẻ line màu tím thương hiệu */
+            background-color: #FFC55C !important; /* Màu vàng thương hiệu tươi sáng */
+            border-bottom: 3px solid #512773 !important; /* Kẻ viền line màu tím thương hiệu làm điểm nhấn */
             padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important; /* Đổ bóng nhẹ cho sang */
         }
 
+        /* CHỮ MENU ĐỔI SANG MÀU TÍM ĐẬM ĐỂ NỔI TRÊN NỀN VÀNG */
         .custom-nav-link {
-            color: #512773 !important; /* Chữ màu tím */
-            font-weight: 700; /* Tăng độ đậm lên xíu cho rõ chữ */
-            margin: 0 12px;
+            color: #512773 !important; /* Chữ màu tím thương hiệu cực kỳ sắc nét */
+            font-weight: 800; /* Tăng độ đậm lên nhìn cho chuyên nghiệp */
+            margin: 0 15px;
             text-decoration: none;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            display: inline-block;
         }
 
+            /* HIỆU ỨNG RÊ CHUỘT VÀO MENU */
             .custom-nav-link:hover {
-                color: #ffc107 !important; /* Di chuột vào đổi sang màu vàng ấm */
-                transform: translateY(-1px); /* Hiệu ứng nổi nhẹ khi rê chuột */
+                color: #FFFFFF !important; /* Rê chuột vào chữ biến thành màu TRẮNG tinh khôi siêu nổi */
+                transform: translateY(-2px); /* Nảy nhẹ lên tinh tế */
             }
 
+        /* 🌟 FOOTER ĐỔI ĐỒNG BỘ SANG MÀU VÀNG ẤM */
         .custom-footer {
-            background-color: #512773 !important; /* Đắp chân trang màu tím */
-            color: #FFF6F0 !important;
+            background-color: #FFC55C !important; /* Đổi footer sang màu vàng luôn cho đồng bộ */
+            color: #274753 !important; /* Đổi chữ footer sang màu tối cho dễ đọc */
+            border-top: 3px solid #512773 !important; /* Viền tím trên footer cho khớp với header */
         }
 
+            /* Mấy cái tiêu đề nhỏ trong Footer (🐾 PET LUV, Liên hệ, Đồ án) */
+            .custom-footer h5 {
+                color: #512773 !important; /* Ép tiêu đề footer sang màu tím đậm bần bật */
+                font-weight: 700 !important;
+            }
+
+            /* Đoạn chữ mô tả và list trong Footer */
+            .custom-footer p, .custom-footer ul, .custom-footer div {
+                color: #274753 !important; /* Chữ màu trầm ấm, rõ ràng, không bị mờ */
+            }
+
             .custom-footer a {
-                color: #ffc107 !important;
+                color: #512773 !important; /* Đường link màu tím */
                 text-decoration: none;
+                font-weight: 600;
             }
 
                 .custom-footer a:hover {
+                    color: #000000 !important;
                     text-decoration: underline;
                 }
     </style>
@@ -66,7 +85,7 @@
             <div class="container d-flex justify-content-between align-items-center">
 
                 <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
-                    <img src="~/images/logo/logo.svg" alt="logo" width="120">
+                    <img src="~/images/logo/logo-new.svg" alt="logo" style="height: 100px; width: auto;">
                 </a>
 
                 <div class="d-flex align-items-center">
@@ -105,7 +124,7 @@
             <div class="row">
                 <div class="col-md-4 mb-3 mb-md-0">
                     <h5 class="fw-bold text-warning">🐾 PET LUV</h5>
-                    <p class="small text-white-50">Hệ thống dịch vụ Spa, Hotel và Cửa hàng phụ kiện thú cưng cao cấp phục vụ các boss tận tâm.</p>
+                    <p class="small text-white-50">Cửa hàng trực tuyến chuyên cung cấp thức ăn hạt dinh dưỡng và phụ kiện thú cưng cao cấp phục vụ các boss tận tâm.</p>
                 </div>
                 <div class="col-md-4 mb-3 mb-md-0 text-md-center">
                     <h5 class="fw-bold text-white">Liên hệ</h5>
