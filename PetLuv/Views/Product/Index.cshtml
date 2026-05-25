@@ -61,7 +61,8 @@
                         <a asp-action="Details" asp-route-id="@item.ProductID" class="d-block text-center p-3 bg-light position-relative" style="height: 240px; display: flex; align-items: center; justify-content: center;">
                             @if (!string.IsNullOrEmpty(item.ImageURL))
                             {
-                                <img src="@Url.Content(item.ImageURL)" alt="@item.ProductName" class="img-fluid custom-card-img" style="max-height: 190px; object-fit: contain; transition: transform 0.3s ease;" />
+                                <img src="@Url.Content(item.ImageURL)" alt="@item.ProductName" class="
+-fluid custom-card-img" style="max-height: 190px; object-fit: contain; transition: transform 0.3s ease;" />
                             }
                             else
                             {
