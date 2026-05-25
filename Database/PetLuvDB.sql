@@ -62,11 +62,6 @@ VALUES
 (N'Royal Canin cho mèo', 230000, 20, N'Sản phẩm chuyên biệt cho các dòng mèo khác nhau.', '~/images/products/16-hat-meo-royal-canin.jpg', N'Thức ăn mèo');
 
 --fix trang chủ
-USE master;
-GO
-ALTER DATABASE PetLuvDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-DROP DATABASE PetLuvDB;
-
 USE PetLuvDB;
 GO
 
@@ -129,3 +124,15 @@ USE PetLuvDB;
 GO
 UPDATE dbo.Users SET Role = 'Admin' WHERE Email = '1304.khongngoc@gmail.com';
 GO
+
+--Thêm sản phẩm phụ kiện
+INSERT INTO Products (ProductName, Price, Stock, Description, ImageURL, Category)
+VALUES 
+(N'Vòng cổ quả chuông đệm da mềm', 45000, 50, N'Thiết kế chuông bạc nhỏ xinh kèm lớp đệm da êm ái cho boss.', '17-vong-co-chuong.jpg', N'Phụ kiện'),
+(N'Bát ăn gốm sứ chống kiến cao cấp', 120000, 30, N'Chất liệu gốm dày dặn, dễ vệ sinh, thiết kế máng chống kiến bò.', '18-bat-an-gom-su.jpg', N'Phụ kiện'),
+(N'Nhà cây Cat Tree gỗ hiện đại', 850000, 10, N'Nhà cây mini bằng gỗ tự nhiên, tích hợp cột cào móng siêu bền.', '19-nha-cay-cat-tree.jpg', N'Phụ kiện'),
+(N'Áo nỉ Hoodie sọc Bear dễ thương', 75000, 40, N'Vải nỉ cotton co giãn 4 chiều, giữ ấm tốt và cực kỳ thời trang.', '20-ao-hoodie-thucung.jpg', N'Phụ kiện'),
+(N'Đệm nằm bông vương miện hoàng gia', 250000, 15, N'Lớp bông PP siêu êm, bọc vải nhung mềm mại cho giấc ngủ hoàng gia.', '21-dem-nam-hoang-gia.jpg', N'Phụ kiện'),
+(N'Đồ chơi cần câu lông vũ tương tác', 25000, 100, N'Giúp kích thích vận động và xả stress hiệu quả cho các bé mèo.', '22-can-cau-long-vu.jpg', N'Phụ kiện');
+GO
+

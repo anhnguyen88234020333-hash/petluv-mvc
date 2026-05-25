@@ -9,7 +9,7 @@ namespace PetLuv.Data
 
         public DbSet<Product> Products { get; set; }
         
-        // Phụng nhớ phải có dòng này thì trang Đăng nhập mới chạy được nè!
+        
         public DbSet<User> Users { get; set; } 
         // Thêm dòng này để Entity Framework hiểu và tạo bảng Cart
         public DbSet<Cart> Carts { get; set; }
@@ -37,7 +37,15 @@ namespace PetLuv.Data
                 new Product { ProductID = 13, ProductName = "Mr.Vet Grain Free Tuna", Price = 130000, ImageURL = "13-hat-meo-mr-vet.jpg", Description = "Công thức Grain-Free không ngũ cốc, giàu đạm từ cá ngừ tươi, dành riêng cho các bé mèo có hệ tiêu hóa nhạy cảm.", Category = "Thức ăn mèo" },
                 new Product { ProductID = 14, ProductName = "Nutrience SubZero Red", Price = 280000, ImageURL = "14-hat-meo-nutrience.jpg", Description = "Thức ăn sấy lạnh cao cấp từ thịt bò và cá, cung cấp năng lượng vượt trội cho mèo năng động.", Category = "Thức ăn mèo" },
                 new Product { ProductID = 15, ProductName = "Reflex Plus Kitten Chicken", Price = 95000, ImageURL = "15-hat-meo-reflex.jpg", Description = "Dinh dưỡng dễ hấp thụ từ thịt gà sạch, giúp mèo con lớn nhanh và có hệ miễn dịch vượt trội.", Category = "Thức ăn mèo" },
-                new Product { ProductID = 16, ProductName = "Royal Canin Mother & Babycat", Price = 220000, ImageURL = "16-hat-meo-royal-canin.jpg", Description = "Sản phẩm đặc chế cho mèo mẹ đang mang thai và mèo con mới tập ăn, kết cấu hạt mềm dễ nhai.", Category = "Thức ăn mèo" }
+                new Product { ProductID = 16, ProductName = "Royal Canin Mother & Babycat", Price = 220000, ImageURL = "16-hat-meo-royal-canin.jpg", Description = "Sản phẩm đặc chế cho mèo mẹ đang mang thai và mèo con mới tập ăn, kết cấu hạt mềm dễ nhai.", Category = "Thức ăn mèo" },
+                // Thêm 6 phụ kiện
+new Product { ProductID = 17, ProductName = "Vòng cổ quả chuông đệm da mềm", Price = 45000, ImageURL = "17-vong-co-chuong.jpg", Description = "Thiết kế chuông bạc nhỏ xinh kèm lớp đệm da êm ái cho boss.", Category = "Phụ kiện" },
+new Product { ProductID = 18, ProductName = "Bát ăn gốm sứ chống kiến cao cấp", Price = 120000, ImageURL = "18-bat-an-gom-su.jpg", Description = "Chất liệu gốm dày dặn, dễ vệ sinh, thiết kế máng chống kiến bò.", Category = "Phụ kiện" },
+new Product { ProductID = 19, ProductName = "Nhà cây Cat Tree gỗ hiện đại", Price = 850000, ImageURL = "19-nha-cay-cat-tree.jpg", Description = "Nhà cây mini bằng gỗ tự nhiên, tích hợp cột cào móng siêu bền.", Category = "Phụ kiện" },
+new Product { ProductID = 20, ProductName = "Áo nỉ Hoodie sọc Bear dễ thương", Price = 75000, ImageURL = "20-ao-hoodie-thucung.jpg", Description = "Vải nỉ cotton co giãn 4 chiều, giữ ấm tốt và cực kỳ thời trang.", Category = "Phụ kiện" },
+new Product { ProductID = 21, ProductName = "Đệm nằm bông vương miện hoàng gia", Price = 250000, ImageURL = "21-dem-nam-hoang-gia.jpg", Description = "Lớp bông PP siêu êm, bọc vải nhung mềm mại cho giấc ngủ hoàng gia.", Category = "Phụ kiện" },
+new Product { ProductID = 22, ProductName = "Đồ chơi cần câu lông vũ tương tác", Price = 25000, ImageURL = "22-can-cau-long-vu.jpg", Description = "Giúp kích thích vận động và xả stress hiệu quả cho các bé mèo.", Category = "Phụ kiện" }
+
             );
         }
     }
