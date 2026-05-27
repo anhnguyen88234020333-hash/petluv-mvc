@@ -65,13 +65,10 @@ VALUES
 USE PetLuvDB;
 GO
 
--- Bước 1: Xóa toàn bộ dữ liệu cũ để làm mới lại từ đầu
 DELETE FROM Products;
 
--- Bước 2: Reset con số ID quay về số 0 để khi nạp món mới nó sẽ bắt đầu từ 1
 DBCC CHECKIDENT ('Products', RESEED, 0);
 
--- Bước 3: Nạp lại 4 sản phẩm theo đúng thứ tự Ngọc vừa dò
 INSERT INTO Products (ProductName, Price, Stock, Description, ImageURL, Category)
 VALUES 
 (N'SmartHeart Adult Dog Food', 100000, 30, N'Dinh dưỡng hoàn chỉnh cho chó trưởng thành.', '~/images/products/1-hat-cho-adult-smartheart.jpg', N'Thức ăn'), -- Sẽ có ID = 1
@@ -92,7 +89,7 @@ GO
 -- Kiểm tra và thêm người dùng số 1 nếu chưa có
 IF NOT EXISTS (SELECT 1 FROM Users WHERE UserID = 1)
 BEGIN
-    SET IDENTITY_INSERT Users ON; -- Cho phép tự điền ID là 1
+    SET IDENTITY_INSERT Users ON; 
     INSERT INTO Users (UserID, FullName, Email, Password, Role) 
     VALUES (1, N'Khổng Bảo Ngọc', 'ngoc@ueh.edu.vn', '123', 'Customer');
     SET IDENTITY_INSERT Users OFF;
@@ -141,13 +138,11 @@ SELECT * FROM Products;
 USE PetLuvDB;
 GO
 
--- 1. Xóa sạch 6 món phụ kiện cũ đang bị lệch đường dẫn đi
+-- 1. Xóa sạch 6 món phụ kiện cũ 
 DELETE FROM Products WHERE ProductID >= 17;
 
--- 2. Bật tính năng cho phép chèn đúng số ID (17-22) bằng tay vào SQL
 SET IDENTITY_INSERT Products ON;
 
--- 3. Bơm lại 6 món phụ kiện với ImageURL có đầy đủ dấu ngã giống hệt 16 món hạt cũ
 INSERT INTO Products (ProductID, ProductName, Price, Stock, Description, ImageURL, Category)
 VALUES 
 (17, N'Vòng cổ quả chuông đệm da mềm', 45000, 50, N'Thiết kế chuông bạc nhỏ xinh kèm lớp đệm da êm ái cho boss.', '~/images/products/17-vong-co-chuong.jpg', N'Phụ kiện'),
@@ -157,6 +152,5 @@ VALUES
 (21, N'Đệm nằm bông vương miện hoàng gia', 250000, 15, N'Lớp bông PP siêu êm, bọc vải nhung mềm mại cho giấc ngủ hoàng gia.', '~/images/products/21-dem-nam-hoang-gia.jpg', N'Phụ kiện'),
 (22, N'Đồ chơi cần câu lông vũ tương tác', 25000, 100, N'Giúp kích thích vận động và xả stress hiệu quả cho các bé mèo.', '~/images/products/22-can-cau-long-vu.jpg', N'Phụ kiện');
 
--- 4. Tắt tính năng chèn ID
 SET IDENTITY_INSERT Products OFF;
 GO
