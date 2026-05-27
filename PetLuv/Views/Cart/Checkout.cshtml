@@ -49,7 +49,7 @@
                 @foreach (var item in Model)
                 {
                     <div class="d-flex justify-content-between mb-2">
-                        <span>@item.Product.ProductName (x@item.Quantity)</span>
+                        <span>@item.Product.ProductName (x@(item.Quantity))</span>
                         <span>@((item.Product.Price * item.Quantity).ToString("N0")) VNĐ</span>
                     </div>
                 }
