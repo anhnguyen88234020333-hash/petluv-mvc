@@ -1,0 +1,89 @@
+﻿@model IEnumerable<PetLuv.Models.OrderDetail>
+
+@{
+    var order = ViewBag.Order as PetLuv.Models.Order;
+    ViewData["Title"] = "Chi tiết đơn hàng #" + order?.OrderID;
+}
+
+<div class="container mt-4" style="font-family: 'Nunito', sans-serif; padding-bottom: 100px;">
+    <a asp-action="AdminOrder" class="btn btn-sm btn-secondary mb-3 px-3 shadow-sm" style="border-radius: 20px;">
+        ⬅️ Quay lại danh sách đơn hàng
+    </a>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 p-4" style="border-radius: 20px; background-color: #FFF9F3;">
+                <h4 class="fw-bold mb-3" style="color: #512773;">📋 Thông tin đơn hàng</h4>
+
+                <div class="mb-2"><strong>Mã đơn hàng:</strong> <span class="text-muted">#@order?.OrderID</span></div>
+                <div class="mb-2"><strong>Người nhận:</strong> <span class="fw-bold">@order?.CustomerName</span></div>
+                <div class="mb-2"><strong>Số điện thoại:</strong> <span class="text-muted">@order?.Phone</span></div>
+                <div class="mb-2"><strong>Địa chỉ giao:</strong> <span class="text-muted">@order?.Address</span></div>
+                <div class="mb-3"><strong>Ngày đặt hàng:</strong> <span class="text-muted">@order?.OrderDate.ToString("dd/MM/yyyy HH:mm")</span></div>
+
+                <hr style="border-top: 1px dashed #6c757d;" />
+
+                <form asp-action="UpdateOrderStatus" method="post" class="mt-2">
+                    <input type="hidden" name="orderId" value="@order?.OrderID" />
+                    <label class="form-label fw-bold" style="color: #512773;">⚡ Xử lý đơn hàng:</label>
+                    <div class="d-flex gap-2">
+                        <select name="newStatus" class="form-select shadow-sm" style="border-radius: 10px;">
+                            <option value="0" selected="@(order?.Status == 0)">⏳ Chờ xử lý / COD</option>
+                            <option value="1" selected="@(order?.Status == 1)">✅ Đã thanh toán</option>
+                            <option value="2" selected="@(order?.Status == 2)">❌ Hủy đơn hàng</option>
+                        </select>
+                        <button type="submit" class="btn text-white fw-bold shadow-sm" style="background-color: #512773; border-radius: 10px;">
+                            Lưu
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 p-4" style="border-radius: 20px; background-color: white;">
+                <h4 class="fw-bold mb-3" style="color: #512773;">📦 Danh sách sản phẩm</h4>
+
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr class="text-secondary" style="border-bottom: 2px solid #f1f5f9;">
+                                <th>Sản phẩm</th>
+                                <th class="text-center">Số lượng</th>
+                                <th class="text-end">Đơn giá</th>
+                                <th class="text-end">Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="fw-bold" style="color: #274753; padding: 15px 0;">
+                                            @item.Product?.ProductName
+                                        </td>
+                                        <td class="text-center fw-bold">x@item.Quantity</td>
+                                        <td class="text-end text-muted">@item.Price.ToString("N0") đ</td>
+                                        <td class="text-end fw-bold text-danger">
+                                            @((item.Price * item.Quantity).ToString("N0")) đ
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <hr style="border-top: 2px solid #f1f5f9;" />
+
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <h5 class="fw-bold m-0" style="color: #512773;">💰 TỔNG CỘNG ĐƠN HÀNG:</h5>
+                    <h3 class="text-danger fw-bold m-0" style="font-family: 'Poppins', sans-serif;">
+                        @order?.TotalAmount.ToString("N0") VNĐ
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

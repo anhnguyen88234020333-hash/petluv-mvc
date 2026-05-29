@@ -154,3 +154,49 @@ VALUES
 
 SET IDENTITY_INSERT Products OFF;
 GO
+
+--Thêm sản phẩm
+INSERT INTO Products (ProductName, Price, Stock, Description, ImageURL, Category) VALUES
+
+--THỨC ĂN
+(N'Súp Thưởng Ciao Churu Vị Cá Hồi', 45000, 50, N'Súp thưởng thơm ngon kích thích vị giác tuyệt đối, bổ sung vitamin và giúp mượt lông cho mèo cưng.', '~/images/products/23-sup-thuong-ciao-ca-hoi.jpg', N'Thức ăn'),
+(N'Hạt Cho Mèo Con Orijen Cat & Kitten', 290000, 20, N'Dòng hạt cao cấp chứa 85% thành phần thịt cá tươi nguyên chất, cung cấp nguồn đạm sinh học dồi dào.', '~/images/products/24-hat-meo-orijen-kitten.jpg', N'Thức ăn'),
+(N'Pate Lon Morando Cho Chó Vị Thịt Gà', 65000, 35, N'Pate lon nhập khẩu từ Ý, kết cấu mềm mịn, giàu dinh dưỡng, thích hợp làm bữa ăn đổi vị cho cún.', '~/images/products/25-pate-lon-morando-vi-ga.jpg', N'Thức ăn'),
+(N'Xương Gặm Canxi Sạch Răng Cho Cún', 35000, 40, N'Bánh thưởng dạng xương giúp cún giảm mảng bám, sạch răng thơm miệng và hạn chế cắn phá đồ đạc.', '~/images/products/26-banh-thuong-xuong-gam.jpg', N'Thức ăn'),
+(N'Hạt Sỏi Thận Royal Canin Urinary S/O', 220000, 15, N'Thức ăn dinh dưỡng chuyên dụng cho mèo giúp hòa tan sỏi struvite và ngăn ngừa nguy cơ tái phát sỏi thận.', '~/images/products/27-hat-meo-royal-canin-urinary.jpg', N'Thức ăn'),
+
+--PHỤ KIỆN
+(N'Máy Lọc Nước Tự Động Đài Phun', 250000, 12, N'Hệ thống lọc nước tuần hoàn tự động giúp kích thích các Boss uống nhiều nước hơn, bảo vệ hệ tiết niệu.', '~/images/products/28-may-loc-nuoc-tu-dong.jpg', N'Phụ kiện'),
+(N'Balo Phi Hành Gia Trong Suốt Cho Boss', 180000, 18, N'Thiết kế kính vòm trong suốt thời trang giúp Boss dễ dàng ngắm nhìn thế giới khi cùng Sen đi dạo phố.', '~/images/products/29-balo-phi-hanh-gia.jpg', N'Phụ kiện'),
+(N'Xẻng Xúc Cát Vệ Sinh Nhựa PP Dày', 15000, 100, N'Chất liệu nhựa cao cấp siêu bền, thiết kế lỗ lọc chuẩn xác giúp dọn dẹp khay cát của Boss nhanh chóng.', '~/images/products/30-xeng-xuc-cat-ve-sinh.jpg', N'Phụ kiện'),
+(N'Máy Mài Móng Tự Động Chống Trầy Xước', 135000, 10, N'Động cơ êm ái không gây hoảng sợ, giúp mài dũa móng Boss gọn gàng, tránh cào xước sofa và người Sen.', '~/images/products/31-may-mai-mong-tu-dong.jpg', N'Phụ kiện'),
+(N'Đệm Ổ Nằm Hình Quả Chuối Siêu Ấm', 120000, 15, N'Kiểu dáng quả chuối bóc vỏ độc lạ đáng yêu, chất bông cotton siêu mềm mại cho Boss giấc ngủ ngon lành.', '~/images/products/32-dem-nam-hinh-qua-chuoi.jpg', N'Phụ kiện');
+
+UPDATE Products SET Category = N'Thức ăn mèo' WHERE ProductID BETWEEN 23 AND 24;
+UPDATE Products SET Category = N'Thức ăn chó' WHERE ProductID BETWEEN 25 AND 26;
+UPDATE Products SET Category = N'Thức ăn mèo' WHERE ProductID = 27;
+UPDATE Products SET Category = N'Phụ kiện' WHERE ProductID BETWEEN 28 AND 32;
+
+USE PetLuvDB;
+GO
+
+--Vì web không hiện ra sản phẩm
+
+SET IDENTITY_INSERT Products ON;
+
+
+INSERT INTO Products (ProductID, ProductName, Price, Stock, Description, ImageURL, Category)
+VALUES 
+(23, N'Súp Thưởng Ciao Churu Vị Cá Hồi', 45000, 100, N'Súp thưởng thơm ngon kích thích vị giác tuyệt đối, bổ sung vitamin và giúp mượt lông cho mèo cưng.', '~/images/products/23-sup-thuong-ciao-ca-hoi.jpg', N'Thức ăn mèo'),
+(24, N'Hạt Cho Mèo Con Orijen Cat & Kitten', 290000, 50, N'Dòng hạt cao cấp chứa 85% thành phần thịt cá tươi nguyên chất, cung cấp nguồn đạm sinh học dồi dào.', '~/images/products/24-hat-meo-orijen-kitten.jpg', N'Thức ăn mèo'),
+(25, N'Pate Lon Morando Cho Chó Vị Thịt Gà', 65000, 80, N'Pate lon nhập khẩu từ Ý, kết cấu mềm mịn, giàu dinh dưỡng, thích hợp làm bữa ăn đổi vị cho cún.', '~/images/products/25-pate-lon-morando-vi-ga.jpg', N'Thức ăn chó'),
+(26, N'Xương Gặm Canxi Sạch Răng Cho Cún', 35000, 120, N'Bánh thưởng dạng xương giúp cún giảm mảng bám, sạch răng thơm miệng và hạn chế cắn phá đồ đạc.', '~/images/products/26-banh-thuong-xuong-gam.jpg', N'Thức ăn chó'),
+(27, N'Hạt Sỏi Thận Royal Canin Urinary S/O', 220000, 40, N'Thức ăn dinh dưỡng chuyên dụng cho mèo giúp hòa tan sỏi struvite và ngăn ngừa nguy cơ tái phát sỏi thận.', '~/images/products/27-hat-meo-royal-canin-urinary.jpg', N'Thức ăn mèo'),
+(28, N'Máy Lọc Nước Tự Động Đài Phun', 250000, 15, N'Hệ thống lọc nước tuần hoàn tự động giúp kích thích các Boss uống nhiều nước hơn, bảo vệ hệ tiết niệu.', '~/images/products/28-may-loc-nuoc-tu-dong.jpg', N'Phụ kiện'),
+(29, N'Balo Phi Hành Gia Trong Suốt Cho Boss', 180000, 30, N'Thiết kế kính vòm trong suốt thời trang giúp Boss dễ dàng ngắm nhìn thế giới khi cùng Sen đi dạo phố.', '~/images/products/29-balo-phi-hanh-gia.jpg', N'Phụ kiện'),
+(30, N'Xẻng Xúc Cát Vệ Sinh Nhựa PP Dày', 15000, 200, N'Chất liệu nhựa cao cấp siêu bền, thiết kế lỗ lọc chuẩn xác giúp dọn dẹp khay cát của Boss nhanh chóng.', '~/images/products/30-xeng-xuc-cat-ve-sinh.jpg', N'Phụ kiện'),
+(31, N'Máy Mài Móng Tự Động Chống Trầy Xước', 135000, 25, N'Động cơ êm ái không gây hoảng sợ, giúp mài dũa móng Boss gọn gàng, tránh cào xước sofa và người Sen.', '~/images/products/31-may-mai-mong-tu-dong.jpg', N'Phụ kiện'),
+(32, N'Đệm Ổ Nằm Hình Quả Chuối Siêu Ấm', 120000, 10, N'Kiểu dáng quả chuối bóc vỏ độc lạ đáng yêu, chất bông cotton siêu mềm mại cho Boss giấc ngủ ngon lành.', '~/images/products/32-dem-nam-hinh-qua-chuoi.jpg', N'Phụ kiện');
+
+SET IDENTITY_INSERT Products OFF;
+GO

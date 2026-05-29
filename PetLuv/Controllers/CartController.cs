@@ -14,11 +14,79 @@ namespace PetLuv.Controllers
         {
             _context = context;
         }
+        // TÍCH HỢP LUỒNG CỔNG THANH TOÁN VNPAY TEST
+ 
+        public IActionResult PaymentViaVnPay(decimal totalAmount, int orderId)
+        {
+            string vnp_Returnurl = Url.Action("VnPayCallback", "Cart", null, Request.Scheme)!;
+            string vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+            string vnp_TmnCode = "97251525"; // Mã định danh Test mặc định
+            string vnp_HashSecret = "CNXMMZSVZMKXFLWXMLXWNXMXWZXMXWZX"; // Chuỗi khóa bảo mật Test
 
-        // 1. Hiển thị trang Giỏ hàng
+            var vnpay = new VnPayLibrary();
+
+            vnpay.AddRequestData("vnp_Version", "2.1.0");
+            vnpay.AddRequestData("vnp_Command", "pay");
+            vnpay.AddRequestData("vnp_TmnCode", vnp_TmnCode);
+            vnpay.AddRequestData("vnp_Amount", ((long)(totalAmount * 100)).ToString()); // Số tiền nhân 100 theo quy định VNPAY
+            vnpay.AddRequestData("vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss"));
+            vnpay.AddRequestData("vnp_CurrCode", "VND");
+            vnpay.AddRequestData("vnp_IpAddr", HttpContext.Connection.RemoteIpAddress?.ToString() ?? "127.0.0.1");
+            vnpay.AddRequestData("vnp_Locale", "vn");
+            vnpay.AddRequestData("vnp_OrderInfo", $"Thanh toan don hang PetLuv #{orderId}");
+            vnpay.AddRequestData("vnp_OrderType", "other");
+            vnpay.AddRequestData("vnp_ReturnUrl", vnp_Returnurl);
+            vnpay.AddRequestData("vnp_TxnRef", orderId.ToString());
+
+            string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
+            return Redirect(paymentUrl);
+        }
+
+        public IActionResult VnPayCallback()
+        {
+            string vnp_HashSecret = "CNXMMZSVZMKXFLWXMLXWNXMXWZXMXWZX";
+            var vnpayData = Request.Query;
+            var vnpay = new VnPayLibrary();
+
+            foreach (var key in vnpayData.Keys)
+            {
+                if (!string.IsNullOrEmpty(key) && key.StartsWith("vnp_"))
+                {
+                    vnpay.AddResponseData(key, vnpayData[key]!);
+                }
+            }
+
+            string inputHash = Request.Query["vnp_SecureHash"]!;
+            bool checkSignature = vnpay.ValidateSignature(inputHash, vnp_HashSecret);
+
+            if (checkSignature)
+            {
+                string vnp_ResponseCode = Request.Query["vnp_ResponseCode"]!;
+                string orderId = Request.Query["vnp_TxnRef"]!;
+
+                if (vnp_ResponseCode == "00")
+                {
+                    // >>> THANH TOÁN THÀNH CÔNG GIAO DỊCH VNPAY <<<
+                    ViewBag.Message = $"Thanh toán thành công đơn hàng #{orderId} qua VNPAY rồi nè Boss! 🎉";
+                }
+                else
+                {
+                    // >>> THANH TOÁN THẤT BẠI HOẶC BOSS HỦY THAO TÁC <<<
+                    ViewBag.Message = $"Giao dịch đơn hàng #{orderId} không thành công hoặc đã bị hủy rồi bồ ơi.";
+                }
+            }
+            else
+            {
+                ViewBag.Message = "Có lỗi xảy ra trong quá trình kiểm tra chữ ký bảo mật VNPAY.";
+            }
+
+            return View();
+        }
+
+        // Hiển thị trang Giỏ hàng
         public async Task<IActionResult> Index()
         {
-            int currentUserId = 1; // Giả lập User ID
+            int currentUserId = 1;
 
             var cartItems = await _context.Carts
                 .Include(c => c.Product)
@@ -28,18 +96,16 @@ namespace PetLuv.Controllers
             return View(cartItems);
         }
 
-        // 2. HÀM QUAN TRỌNG: Tiếp nhận yêu cầu "Thêm vào giỏ" từ các nút bấm
+        // Tiếp nhận yêu cầu "Thêm vào giỏ"
         public async Task<IActionResult> AddToCart(int productId)
         {
             int currentUserId = 1;
 
-            // Kiểm tra xem món này đã có trong giỏ chưa
             var cartItem = await _context.Carts
                 .FirstOrDefaultAsync(c => c.UserId == currentUserId && c.ProductId == productId);
 
             if (cartItem == null)
             {
-                // Nếu chưa có: Tạo mới
                 var newItem = new Cart
                 {
                     UserId = currentUserId,
@@ -50,15 +116,14 @@ namespace PetLuv.Controllers
             }
             else
             {
-                // Nếu có rồi: Tăng số lượng lên 1
                 cartItem.Quantity += 1;
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index)); // Thêm xong nhảy thẳng vào trang giỏ hàng luôn
+            return RedirectToAction(nameof(Index));
         }
 
-        // 3. Cập nhật số lượng
+        // Cập nhật số lượng sản phẩm trong giỏ
         [HttpPost]
         public async Task<IActionResult> UpdateQuantity(int cartId, int quantity)
         {
@@ -71,7 +136,7 @@ namespace PetLuv.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // 4. Xóa sản phẩm khỏi giỏ
+        // Xóa sản phẩm khỏi giỏ hàng
         public async Task<IActionResult> RemoveFromCart(int cartId)
         {
             var cartItem = await _context.Carts.FindAsync(cartId);
@@ -82,7 +147,8 @@ namespace PetLuv.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-        // 5. PHẦN CỦA PHỤNG: Hiển thị trang nhập địa chỉ (Checkout)
+
+        // Hiển thị giao diện Nhập địa chỉ & Chọn Phương thức nhận hàng
         public async Task<IActionResult> Checkout()
         {
             int currentUserId = 1;
@@ -99,9 +165,9 @@ namespace PetLuv.Controllers
 
             return View(cartItems);
         }
-        // 6. PHẦN CỦA PHỤNG: Xử lý đặt hàng thực tế (Lưu Order & OrderDetail)
+
         [HttpPost]
-        public async Task<IActionResult> ProcessOrder(string CustomerName, string Phone, string Address)
+        public async Task<IActionResult> ProcessOrder(string CustomerName, string Phone, string Address, string PaymentMethod)
         {
             int currentUserId = 1;
 
@@ -112,21 +178,24 @@ namespace PetLuv.Controllers
 
             if (cartItems.Count > 0)
             {
-                // Bước A: Tạo Order mới
+                // Bước A: Tính tổng tiền trước để xài chung cho COD hoặc VNPAY
+                decimal totalAmount = cartItems.Sum(c => (c.Product.Price * c.Quantity));
+
+                // Bước B: Tạo Đơn hàng mới lưu xuống DB
                 var order = new Order
                 {
                     OrderDate = DateTime.Now,
                     CustomerName = CustomerName,
                     Address = Address,
                     Phone = Phone,
-                    TotalAmount = cartItems.Sum(c => (c.Product.Price * c.Quantity)),
-                    Status = 0
+                    TotalAmount = totalAmount,
+                    Status = 0 // Đơn hàng mới tạo ở trạng thái Chờ xử lý
                 };
 
                 _context.Orders.Add(order);
-                await _context.SaveChangesAsync(); // Lưu để lấy OrderID
+                await _context.SaveChangesAsync(); // Lưu dữ liệu xuống SQL để tạo tự động OrderID
 
-                // Bước B: Lưu chi tiết vào OrderDetail
+                // Bước C: Lưu chi tiết danh sách sản phẩm mua vào bảng phụ OrderDetail
                 foreach (var item in cartItems)
                 {
                     var detail = new OrderDetail
@@ -139,21 +208,28 @@ namespace PetLuv.Controllers
                     _context.OrderDetails.Add(detail);
                 }
 
-                // Bước C: Xóa giỏ hàng sau khi đặt thành công
+                // Bước D: Tiến hành làm sạch giỏ hàng của khách hàng sau khi gom đơn thành công
                 _context.Carts.RemoveRange(cartItems);
                 await _context.SaveChangesAsync();
 
+                if (PaymentMethod == "VNPAY")
+                {
+                    // Đá luồng chuyển hướng trực tiếp qua ngân hàng Sandbox quẹt thẻ
+                    return RedirectToAction("PaymentViaVnPay", "Cart", new { totalAmount = totalAmount, orderId = order.OrderID });
+                }
+
+                // Luồng COD mặc định gốc: Đưa về trang thông báo cảm ơn
                 return View("OrderSuccess", (object)CustomerName);
             }
 
             return RedirectToAction(nameof(Index));
         }
-        // 7. Hiển thị danh sách đơn hàng đã đặt
-        // 7. Hiển thị danh sách đơn hàng đã đặt
-        [Authorize] // 🔐 Khóa trang danh sách đơn hàng
+
+        // Xem danh sách đơn hàng cá nhân đã mua
+        [Authorize]
         public async Task<IActionResult> MyOrders()
         {
-            int currentUserId = 1; // Giả lập User ID như cũ
+            int currentUserId = 1;
 
             var orders = await _context.Orders
                 .OrderByDescending(o => o.OrderDate)
@@ -162,7 +238,8 @@ namespace PetLuv.Controllers
             return View(orders);
         }
 
-        [Authorize] // 🔐 Khóa luôn trang xem chi tiết từng đơn hàng
+        // Xem chi tiết các món trong một đơn hàng cụ thể
+        [Authorize]
         public async Task<IActionResult> OrderDetail(int id)
         {
             var details = await _context.OrderDetails

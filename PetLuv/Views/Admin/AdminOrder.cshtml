@@ -1,0 +1,84 @@
+﻿@model IEnumerable<PetLuv.Models.Order>
+
+@{
+    ViewData["Title"] = "Quản lý đơn hàng - Admin";
+}
+
+<div class="container mt-4" style="font-family: 'Nunito', sans-serif; padding-bottom: 100px;">
+    <h2 class="fw-bold mb-4" style="color: #512773;">🛠️ QUẢN LÝ ĐƠN HÀNG (ADMIN)</h2>
+
+    <div class="card shadow-sm border-0 p-3 mb-4" style="border-radius: 15px; background-color: #FFF9F3;">
+        <form asp-action="AdminOrder" method="get" class="row g-3 align-items-center">
+            <div class="col-md-5">
+                <input type="text" name="searchString" class="form-control" placeholder="🔍 Tìm tên khách hàng hoặc số điện thoại..." value="@ViewBag.CurrentSearch" style="border-radius: 10px;" />
+            </div>
+            <div class="col-md-4">
+                <select name="statusFilter" class="form-select" style="border-radius: 10px;">
+                    <option value="">-- Tất cả trạng thái đơn --</option>
+                    <option value="0" selected="@(ViewBag.CurrentFilter?.ToString() == "0")">⏳ Chờ xử lý / COD</option>
+                    <option value="1" selected="@(ViewBag.CurrentFilter?.ToString() == "1")">✅ Đã thanh toán (VNPAY/Duyệt)</option>
+                    <option value="2" selected="@(ViewBag.CurrentFilter?.ToString() == "2")">❌ Đã hủy đơn</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn text-white fw-bold w-100" style="background-color: #512773; border-radius: 10px;">Lọc kết quả</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card shadow-sm border-0" style="border-radius: 20px; overflow: hidden;">
+        <table class="table table-hover m-0 align-middle text-center">
+            <thead style="background-color: #512773; color: white;">
+                <tr>
+                    <th class="p-3">Mã ĐH</th>
+                    <th>Ngày đặt</th>
+                    <th>Khách hàng</th>
+                    <th>Số điện thoại</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model == null || !Model.Any())
+                {
+                    <tr>
+                        <td colspan="7" class="text-center text-muted p-4">Không tìm thấy đơn hàng nào khớp với điều kiện lọc.</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="p-3 fw-bold">#@item.OrderID</td>
+                            <td>@item.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td class="fw-bold text-start">@item.CustomerName</td>
+                            <td>@item.Phone</td>
+                            <td class="text-danger fw-bold">@item.TotalAmount.ToString("N0") đ</td>
+                            <td>
+                                @if (item.Status == 0)
+                                {
+                                    <span class="badge bg-warning text-dark px-3 py-2" style="border-radius: 10px;">⏳ Chờ xử lý</span>
+                                }
+                                else if (item.Status == 1)
+                                {
+                                    <span class="badge bg-success px-3 py-2" style="border-radius: 10px;">✅ Đã thanh toán</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger px-3 py-2" style="border-radius: 10px;">❌ Đã hủy</span>
+                                }
+                            </td>
+                            <td>
+                                <a asp-action="AdminOrderDetail" asp-route-id="@item.OrderID" class="btn btn-sm btn-outline-primary fw-bold px-3" style="border-radius: 20px;">
+                                    👀 Xem chi tiết
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

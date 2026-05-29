@@ -168,5 +168,57 @@ namespace PetLuv.Controllers
             ViewBag.SuccessMessage = "Đặt lại mật khẩu thành công! Giờ bạn có thể đăng nhập bằng mật khẩu mới rồi đó. 🎉";
             return View();
         }
+    
+   
+        // CHỨC NĂNG: KHÁCH HÀNG XEM & CẬP NHẬT THÔNG TIN CÁ NHÂN
+        
+        // 1. GIAO DIỆN XEM THÔNG TIN (GET)
+        [HttpGet]
+        public IActionResult Profile()
+        {
+            // Lấy Email của người dùng đang đăng nhập từ Cookie
+            var userEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return RedirectToAction("Login");
+            }
+
+            // Tìm user đó trong Database
+            var user = _context.Users.FirstOrDefault(u => u.Email == userEmail);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user); // Trả dữ liệu User về trang giao diện
+        }
+
+        // 2. XỬ LÝ LƯU THÔNG TIN CẢI CHỈNH (POST)
+        [HttpPost]
+        public async Task<IActionResult> Profile(string fullName)
+        {
+            var userEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return RedirectToAction("Login");
+            }
+
+            var user = _context.Users.FirstOrDefault(u => u.Email == userEmail);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Tiến hành cập nhật trường Họ tên mới
+            user.FullName = fullName;
+
+            if (ModelState.IsValid)
+            {
+                await _context.SaveChangesAsync(); // Lưu thay đổi xuống SQL Server
+                ViewBag.SuccessMessage = "Cập nhật thông tin cá nhân thành công rồi nè Boss! 🎉";
+            }
+
+            return View(user);
+        }
     }
 }

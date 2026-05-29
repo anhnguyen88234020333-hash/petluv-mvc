@@ -14,20 +14,28 @@ namespace PetLuv.Controllers
             _context = context;
         }
 
-        // TÍCH HỢP TÌM KIẾM VÀ LỌC GIÁ CHO 16 SẢN PHẨM 
-        public IActionResult Index(string searchTerm, string priceRange)
+        // TÍCH HỢP TÌM KIẾM, LỌC GIÁ VÀ DANH MỤC CHO 32 SẢN PHẨM 
+        
+        public IActionResult Index(string searchTerm, string priceRange, string category)
         {
-            // 1. Lấy toàn bộ danh sách sản phẩm gốc từ SQL Server lên dưới dạng Queryable để chuẩn bị lọc
+           
             var products = _context.Products.AsQueryable();
 
-            // 2. Xử lý Lọc theo Tên sản phẩm (Search) nế
+            //lọc theo Danh mục (Thức ăn chó, Thức ăn mèo, Phụ kiện)
+            if (!string.IsNullOrEmpty(category))
+            {
+                products = products.Where(p => p.Category == category);
+                ViewBag.SelectedCategory = category; 
+            }
+
+            // 2. Xử lý Lọc theo Tên sản phẩm
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 products = products.Where(p => p.ProductName.Contains(searchTerm));
-                ViewBag.SearchTerm = searchTerm; // Giữ lại chữ đã gõ để nó không bị biến mất sau khi load trang
+                ViewBag.SearchTerm = searchTerm; 
             }
 
-            // 3. Xử lý Lọc theo Khoảng giá (Price Filter) khi bấm chọn option
+            
             if (!string.IsNullOrEmpty(priceRange))
             {
                 switch (priceRange)
@@ -42,11 +50,21 @@ namespace PetLuv.Controllers
                         products = products.Where(p => p.Price > 200000);
                         break;
                 }
-                ViewBag.SelectedPrice = priceRange; // Giữ lại trạng thái lựa chọn của bộ lọc
+                ViewBag.SelectedPrice = priceRange; 
             }
 
-            // 4. Chuyển kết quả cuối cùng thành danh sách (ToList) và truyền sang cho giao diện hiển thị
+            
             var data = products.ToList();
+
+            
+            foreach (var item in data)
+            {
+                if (!string.IsNullOrEmpty(item.ImageURL))
+                {
+                    item.ImageURL = item.ImageURL.Trim();
+                }
+            }
+
             return View(data);
         }
 

@@ -13,8 +13,47 @@
         <p class="text-muted mt-2 fs-5">Khám phá thế giới thức ăn dinh dưỡng cao cấp tốt nhất cho các boss cưng</p>
     </div>
 
+    <div class="d-flex justify-content-center gap-3 mb-4 flex-wrap">
+        <a asp-action="Index"
+           asp-route-priceRange="@ViewBag.SelectedPrice"
+           asp-route-searchTerm="@ViewBag.SearchTerm"
+           class="btn px-4 py-2 fw-bold shadow-sm category-tab @(string.IsNullOrEmpty(ViewBag.SelectedCategory) ? "active-tab" : "inactive-tab")"
+           style="border-radius: 30px; transition: all 0.3s ease;">
+            ✨ Tất cả
+        </a>
+
+        <a asp-action="Index"
+           asp-route-category="Thức ăn chó"
+           asp-route-priceRange="@ViewBag.SelectedPrice"
+           asp-route-searchTerm="@ViewBag.SearchTerm"
+           class="btn px-4 py-2 fw-bold shadow-sm category-tab @(ViewBag.SelectedCategory == "Thức ăn chó" ? "active-tab" : "inactive-tab")"
+           style="border-radius: 30px; transition: all 0.3s ease;">
+            🐶 Thức ăn chó
+        </a>
+
+        <a asp-action="Index"
+           asp-route-category="Thức ăn mèo"
+           asp-route-priceRange="@ViewBag.SelectedPrice"
+           asp-route-searchTerm="@ViewBag.SearchTerm"
+           class="btn px-4 py-2 fw-bold shadow-sm category-tab @(ViewBag.SelectedCategory == "Thức ăn mèo" ? "active-tab" : "inactive-tab")"
+           style="border-radius: 30px; transition: all 0.3s ease;">
+            🐱 Thức ăn mèo
+        </a>
+
+        <a asp-action="Index"
+           asp-route-category="Phụ kiện"
+           asp-route-priceRange="@ViewBag.SelectedPrice"
+           asp-route-searchTerm="@ViewBag.SearchTerm"
+           class="btn px-4 py-2 fw-bold shadow-sm category-tab @(ViewBag.SelectedCategory == "Phụ kiện" ? "active-tab" : "inactive-tab")"
+           style="border-radius: 30px; transition: all 0.3s ease;">
+            🧸 Phụ kiện
+        </a>
+    </div>
+
     <div class="card border-0 shadow-sm p-4 mb-5" style="border-radius: 15px; background-color: #F5EEF9;">
         <form method="get" asp-controller="Product" asp-action="Index" class="row g-3 align-items-center">
+
+            <input type="hidden" name="category" value="@ViewBag.SelectedCategory" />
 
             <div class="col-md-5">
                 <div class="input-group">
@@ -61,8 +100,14 @@
                         <a asp-action="Details" asp-route-id="@item.ProductID" class="d-block text-center p-3 bg-light position-relative" style="height: 240px; display: flex; align-items: center; justify-content: center;">
                             @if (!string.IsNullOrEmpty(item.ImageURL))
                             {
-                                <img src="@Url.Content(item.ImageURL)" alt="@item.ProductName" class="
--fluid custom-card-img" style="max-height: 190px; object-fit: contain; transition: transform 0.3s ease;" />
+                                @if (item.ImageURL.StartsWith("~") || item.ImageURL.StartsWith("/"))
+                                {
+                                    <img src="@Url.Content(item.ImageURL)" alt="@item.ProductName" class="img-fluid custom-card-img" style="max-height: 190px; object-fit: contain; transition: transform 0.3s ease;" />
+                                }
+                                else
+                                {
+                                    <img src="@Url.Content("~/images/products/" + item.ImageURL)" alt="@item.ProductName" class="img-fluid custom-card-img" style="max-height: 190px; object-fit: contain; transition: transform 0.3s ease;" />
+                                }
                             }
                             else
                             {
@@ -103,7 +148,31 @@
 </div>
 
 <style>
-    /* Ép chữ tiêu đề ngắt dòng thông minh khi tên sản phẩm quá dài */
+    .category-tab {
+        font-size: 0.95rem;
+        border: 2px solid transparent;
+    }
+
+    .active-tab {
+        background-color: #512773 !important;
+        color: #ffffff !important;
+        border-color: #ffc107 !important;
+        transform: scale(1.05);
+    }
+
+    .inactive-tab {
+        background-color: #ffffff;
+        color: #512773;
+        border-color: #E2D5EB;
+    }
+
+        .inactive-tab:hover {
+            background-color: #F5EEF9;
+            color: #512773;
+            border-color: #512773;
+            transform: translateY(-2px);
+        }
+
     .text-truncate-2 {
         display: -webkit-box;
         -webkit-line-clamp: 2;
@@ -111,7 +180,6 @@
         overflow: hidden;
     }
 
-    /* Hiệu ứng zoom nhẹ hình ảnh và nổi khối Card khi di chuột vào */
     .custom-product-card:hover {
         transform: translateY(-8px);
         box-shadow: 0 12px 25px rgba(81, 39, 115, 0.15) !important;
@@ -121,7 +189,6 @@
             transform: scale(1.06);
         }
 
-    /* Tạo hiệu ứng chuyển màu cho nút Thêm vào giỏ hàng */
     .custom-btn-cart:hover {
         background-color: #ffc107 !important;
         color: #512773 !important;

@@ -48,7 +48,7 @@ namespace PetLuv.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Cart");
+                    b.ToTable("Cart", (string)null);
                 });
 
             modelBuilder.Entity("PetLuv.Models.Product", b =>
@@ -79,7 +79,7 @@ namespace PetLuv.Migrations
 
                     b.HasKey("ProductID");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
 
                     b.HasData(
                         new
@@ -267,7 +267,7 @@ namespace PetLuv.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("PetLuv.Models.Cart", b =>

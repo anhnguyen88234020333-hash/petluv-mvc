@@ -21,21 +21,21 @@
         }
 
         body {
-            background-color: #FFF6F0; /* Màu nền kem beige ấm áp */
+            background-color: #FFF6F0; /* Màu nền kem beige*/
         }
 
-        /* 🌟 HEADER ĐỔI SANG MÀU VÀNG ẤM */
+
         .custom-navbar {
-            background-color: #FFC55C !important; /* Màu vàng thương hiệu tươi sáng */
-            border-bottom: 3px solid #512773 !important; /* Kẻ viền line màu tím thương hiệu làm điểm nhấn */
+            background-color: #FFC55C !important;
+            border-bottom: 3px solid #512773 !important;
             padding: 15px 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important; /* Đổ bóng nhẹ cho sang */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
         }
 
-        /* CHỮ MENU ĐỔI SANG MÀU TÍM ĐẬM ĐỂ NỔI TRÊN NỀN VÀNG */
+
         .custom-nav-link {
-            color: #512773 !important; /* Chữ màu tím thương hiệu cực kỳ sắc nét */
-            font-weight: 800; /* Tăng độ đậm lên nhìn cho chuyên nghiệp */
+            color: #512773 !important;
+            font-weight: 800;
             margin: 0 15px;
             text-decoration: none;
             transition: all 0.3s ease;
@@ -44,20 +44,20 @@
 
             /* HIỆU ỨNG RÊ CHUỘT VÀO MENU */
             .custom-nav-link:hover {
-                color: #FFFFFF !important; /* Rê chuột vào chữ biến thành màu TRẮNG tinh khôi siêu nổi */
-                transform: translateY(-2px); /* Nảy nhẹ lên tinh tế */
+                color: #FFFFFF !important; /* Rê chuột vào chữ biến thành màu TRẮNG */
+                transform: translateY(-2px);
             }
 
-        /* 🌟 FOOTER ĐỔI ĐỒNG BỘ SANG MÀU VÀNG ẤM */
+        /* FOOTER ĐỔI ĐỒNG BỘ SANG MÀU VÀNG ẤM */
         .custom-footer {
             background-color: #FFC55C !important; /* Đổi footer sang màu vàng luôn cho đồng bộ */
             color: #274753 !important; /* Đổi chữ footer sang màu tối cho dễ đọc */
             border-top: 3px solid #512773 !important; /* Viền tím trên footer cho khớp với header */
         }
 
-            /* Mấy cái tiêu đề nhỏ trong Footer (🐾 PET LUV, Liên hệ, Đồ án) */
+
             .custom-footer h5 {
-                color: #512773 !important; /* Ép tiêu đề footer sang màu tím đậm bần bật */
+                color: #512773 !important;
                 font-weight: 700 !important;
             }
 
@@ -94,11 +94,16 @@
                     <a class="custom-nav-link" asp-controller="Cart" asp-action="Index">Giỏ hàng</a>
                     <a class="custom-nav-link" asp-controller="Cart" asp-action="MyOrders">Đơn hàng</a>
 
+                    <a class="custom-nav-link" asp-controller="Home" asp-action="Privacy">Chính sách</a>
+
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
                         <span class="badge bg-white px-3 py-2 ms-3 border shadow-sm" style="color: #512773 !important; font-weight: bold; border-radius: 15px; border-color: #512773 !important;">
                             🐾 Xin chào, Boss!
                         </span>
+                        <a class="ms-3 custom-nav-link m-0 fw-bold" asp-controller="Account" asp-action="Profile" style="font-size: 0.95rem;">
+                            ⚙️ Hồ sơ
+                        </a>
                         <a class="ms-2 small text-muted fw-bold" asp-controller="Account" asp-action="Logout" style="text-decoration: none;">(Đăng xuất)</a>
                     }
                     else
@@ -113,13 +118,13 @@
         </nav>
     </header>
 
-    <div class="container my-5 flex-grow-1">
-        <main role="main" class="pb-3">
+    <div class="container flex-grow-1" style="padding-top: 80px; padding-bottom: 120px;">
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="custom-footer py-4 mt-auto border-top">
+    <footer class="custom-footer py-4 border-top">
         <div class="container text-center text-md-start">
             <div class="row">
                 <div class="col-md-4 mb-3 mb-md-0">

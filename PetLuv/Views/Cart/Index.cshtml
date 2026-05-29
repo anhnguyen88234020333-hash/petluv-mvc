@@ -30,7 +30,9 @@
     {
         <div class="alert alert-info text-center">
             Giỏ hàng của bạn đang trống. <br />
-            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary mt-3">Tiếp tục mua sắm</a>
+            <a asp-controller="Product" asp-action="Index" class="btn btn-secondary py-2 px-3 fw-bold" style="border-radius: 12px; background-color: #6c757d; border: none; transition: all 0.3s;">
+                <i class="bi bi-arrow-left"></i> Tiếp tục mua hàng
+            </a>
         </div>
     }
     else
@@ -64,7 +66,7 @@
                             </td>
                             <td class="text-center">
                                 <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-cartId="@item.CartId"
-                                   class="btn btn-danger btn-sm" onclick="return confirm('Ngọc có chắc muốn xóa món này không?')">
+                                   class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa món này không?')">
                                     Xóa
                                 </a>
                             </td>
@@ -74,7 +76,9 @@
             </table>
 
             <div class="d-flex justify-content-between align-items-center mt-4">
-                <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Tiếp tục mua hàng</a>
+                <a asp-controller="Product" asp-action="Index" class="btn text-white fw-bold px-4 py-2" style="background-color: #6c757d; border-radius: 10px;">
+                    🛒 Tiếp tục mua hàng
+                </a>
                 <div class="text-end">
                     <p class="mb-1">Tổng cộng thanh toán:</p>
                     <span class="total-price">@Model.Sum(i => i.Product.Price * i.Quantity).ToString("N0") VNĐ</span>
