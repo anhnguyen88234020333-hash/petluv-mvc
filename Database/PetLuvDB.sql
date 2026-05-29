@@ -98,7 +98,7 @@ END
 --fix data của chi tiết đơn hàng
 USE PetLuvDB;
 GO
--- Thêm các cột còn thiếu để khớp hoàn toàn với code C# của nhóm
+-- Thêm các cột còn thiếu để khớp hoàn toàn với code C# 
 ALTER TABLE dbo.Orders ADD CustomerName NVARCHAR(255) NULL;
 ALTER TABLE dbo.Orders ADD Address NVARCHAR(MAX) NULL;
 ALTER TABLE dbo.Orders ADD Phone VARCHAR(50) NULL;
